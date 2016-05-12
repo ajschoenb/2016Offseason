@@ -1,0 +1,52 @@
+<DOCTYPE! html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+  <% include ../partials/head.ejs %>
+</head>
+<body class="container">
+  <header>
+    <% include ../partials/header.ejs %>
+  </header>
+
+  <main style="padding-top: 60px;">
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        <form id="alliance_gen" method="post" action="/alliance-gen">
+          <div class="form-group" style="padding-top:15px;">
+            <div class="row">
+              <div class="col-xs-3">
+                <div class="input-group-sm">
+                  <label class="control-label">Team 1</label>
+                  <input tabindex="1" type="text" class="form-control" name="team_1" required />
+                </div>
+              </div>
+              <div class="col-xs-3 col-xs-offset-1">
+                <div class="input-group-sm">
+                  <label class="control-label">Team 2</label>
+                  <input tabindex="2" type="text" class="form-control" name="team_2" required />
+                </div>
+              </div>
+              <div class="col-xs-3 col-xs-offset-1">
+                <div class="input-group-sm">
+                  <label class="control-label">Team 3</label>
+                  <input tabindex="3" type="text" class="form-control" name="team_3" required />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-11">
+              <input tabindex="4" style="float:right;" type="submit" class="btn btn-success" value="Generate" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+</body>
+</html>

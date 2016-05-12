@@ -1,0 +1,436 @@
+<DOCTYPE! html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+  <% include ../partials/head.ejs %>
+</head>
+<body class="container">
+  <header>
+    <% include ../partials/header.ejs %>
+  </header>
+
+  <main style="padding-top:60px;">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <%- message %>
+        <form id="main_data_entry" method="post" action="/parse-data">
+          <div class="form-group" style="padding-top:15px;">
+            <div class="row">
+              <div class="col-xs-3 col-xs-offset-3">
+                <div class="input-group-sm">
+                  <label class="control-label">Match Number</label>
+                  <input tabindex="1" type="text" class="form-control" name="match_num" required />
+                </div>
+              </div>
+              <div class="col-xs-3 col--xsoffset-5">
+                <div class="input-group-sm">
+                  <label class="control-label">Team Number</label>
+                  <input tabindex="2" type="text" class="form-control" name="team_num" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="padding-top:30px;">
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:30px; text-align:right;"><strong>LB</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Success</label>
+                    <input tabindex="3" type="text" class="form-control" name="lb_success" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Fail</label>
+                    <input tabindex="4" type="text" class="form-control" name="lb_fail" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Rating</label>
+                    <input tabindex="5" type="text" class="form-control" name="lb_rating" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Assist</label>
+                    <input tabindex="6" type="text" class="form-control" name="lb_assist" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Stuck</label>
+                    <input tabindex="7" type="text" class="form-control" name="lb_stuck" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>PC</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="8" type="text" class="form-control" name="a1_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="9" type="text" class="form-control" name="a1_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="10" type="text" class="form-control" name="a1_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="11" type="text" class="form-control" name="a1_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="12" type="text" class="form-control" name="a1_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>CF</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="13" type="text" class="form-control" name="a2_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="14" type="text" class="form-control" name="a2_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="15" type="text" class="form-control" name="a2_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="16" type="text" class="form-control" name="a2_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="17" type="text" class="form-control" name="a2_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>M</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="18" type="text" class="form-control" name="b1_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="19" type="text" class="form-control" name="b1_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="20" type="text" class="form-control" name="b1_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="21" type="text" class="form-control" name="b1_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="22" type="text" class="form-control" name="b1_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>RP</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="23" type="text" class="form-control" name="b2_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="24" type="text" class="form-control" name="b2_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="25" type="text" class="form-control" name="b2_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="26" type="text" class="form-control" name="b2_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="27" type="text" class="form-control" name="b2_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>DB</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="28" type="text" class="form-control" name="c1_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="29" type="text" class="form-control" name="c1_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="30" type="text" class="form-control" name="c1_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="31" type="text" class="form-control" name="c1_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="32" type="text" class="form-control" name="c1_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>SP</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="33" type="text" class="form-control" name="c2_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="34" type="text" class="form-control" name="c2_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="35" type="text" class="form-control" name="c2_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="36" type="text" class="form-control" name="c2_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="37" type="text" class="form-control" name="c2_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>RW</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="38" type="text" class="form-control" name="d1_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="39" type="text" class="form-control" name="d1_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="40" type="text" class="form-control" name="d1_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="41" type="text" class="form-control" name="d1_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="42" type="text" class="form-control" name="d1_stuck" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-1">
+                  <h5 style="padding-top:5px; text-align:right;"><strong>RT</strong></h5>
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="43" type="text" class="form-control" name="d2_success" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="44" type="text" class="form-control" name="d2_fail" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="45" type="text" class="form-control" name="d2_rating" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="46" type="text" class="form-control" name="d2_assist" />
+                </div>
+                <div class="col-xs-2">
+                  <input tabindex="47" type="text" class="form-control" name="d2_stuck" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-2 col-xs-offset-3">
+                  <div class="input-group-sm">
+                    <label class="control-label">Floor Intakes</label>
+                    <input tabindex="48" type="text" class="form-control" name="floor_intakes" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">HP Intakes</label>
+                    <input tabindex="49" type="text" class="form-control" name="hp_intakes" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">HP Missed</label>
+                    <input tabindex="50" type="text" class="form-control" name="hp_missed" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-2 col-xs-offset-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">High Made</label>
+                    <input tabindex="51" type="text" class="form-control" name="high_made" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">High Missed</label>
+                    <input tabindex="52" type="text" class="form-control" name="high_missed" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Low Made</label>
+                    <input tabindex="53" type="text" class="form-control" name="low_made" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Low Missed</label>
+                    <input tabindex="54" type="text" class="form-control" name="low_missed" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-2 col-xs-offset-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Forced Miss</label>
+                    <input tabindex="55" type="text" class="form-control" name="forced_miss" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Knockouts</label>
+                    <input tabindex="56" type="text" class="form-control" name="knockouts" />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Driver Rating</label>
+                    <input tabindex="57" type="text" class="form-control" name="driver_rating" required />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="input-group-sm">
+                    <label class="control-label">Bully Rating</label>
+                    <input tabindex="58" type="text" class="form-control" name="bully_rating" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-2 col-xs-offset-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Hang</label>
+                  <input tabindex="59" type="text" class="form-control" name="hang_success" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Failed Hang</label>
+                  <input tabindex="60" type="text" class="form-control" name="hang_fail" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Challenge</label>
+                  <input tabindex="61" type="text" class="form-control" name="challenge_success" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Failed Challenge</label>
+                  <input tabindex="62" type="text" class="form-control" name="challenge_fail" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-2 col-xs-offset-4">
+                <div class="input-group-sm">
+                  <label class="control-label">Fouls</label>
+                  <input tabindex="63" type="text" class="form-control" name="fouls" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Dead</label>
+                  <input tabindex="64" type="text" class="form-control" name="dead" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-12">
+                <center><h3>Auton</h3></center>
+              </div>
+              <div class="col-xs-2 col-xs-offset-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Floor Intake</label>
+                  <input tabindex="65" type="text" class="form-control" name="auto_floor_intakes" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Defense</label>
+                  <select tabindex="66" class="form-control" name="auto_defense">
+                    <option value="none" selected="selected">None</option>
+                    <option value="LB">LB</option>
+                    <option value="PC">PC</option>
+                    <option value="CF">CF</option>
+                    <option value="M">M</option>
+                    <option value="RP">RP</option>
+                    <option value="DB">DB</option>
+                    <option value="SP">SP</option>
+                    <option value="RW">RW</option>
+                    <option value="RT">RT</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Defense Total</label>
+                  <input tabindex="67" type="text" class="form-control" name="auto_defense_total" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Defense Reach</label>
+                  <input tabindex="68" type="text" class="form-control" name="auto_defense_reach" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-2 col-xs-offset-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Auton High</label>
+                  <input tabindex="69" type="text" class="form-control" name="auto_high_made" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Auton High Missed</label>
+                  <input tabindex="70" type="text" class="form-control" name="auto_high_missed" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Auton Low</label>
+                  <input tabindex="71" type="text" class="form-control" name="auto_low_made" />
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="input-group-sm">
+                  <label class="control-label">Auton Low Missed</label>
+                  <input tabindex="72" type="text" class="form-control" name="auto_low_missed" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-11">
+              <input tabindex="73" style="float:right;" type="submit" class="btn btn-success" value="Submit Data" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+</body>
+</html>

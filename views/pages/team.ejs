@@ -1,0 +1,148 @@
+<DOCTYPE! html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+  <% include ../partials/head.ejs %>
+</head>
+<body class="container">
+  <header>
+    <% include ../partials/header.ejs %>
+  </header>
+
+  <main style="padding-top:60px;">
+    <div class="row">
+      <div class="col-lg-6">
+        <h2>
+          <%= team_number %> - <%= team_name %>
+          <br />
+          <div class="btn-group" role="group" aria-label="...">
+            <a href="/team/<%= previous_team %>" type="button" class="btn btn-default">Previous</a>
+            <a href="/team/<%= next_team %>" type="button" class="btn btn-default">Next</a>
+          </div>
+        </h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-5">
+        <h3 style="margin-top:0;">Avg. Score: <%= avg_auto_score %> / <%= avg_contrib_score %></h3>
+        <h3><u>Autonomous Data</u></h3>
+        <h4 style="margin-top:0;">No Auto: <%= no_autos %></h4>
+        <h4 style="margin-top:0;">Reaches: <%= auto_reaches %></h4>
+        <h4 style="margin-top:0;">High Goals: <%= auto_high_made %> / <%= auto_high_attempts %></h4>
+        <h4 style="margin-top:0;">Low Goals: <%= auto_low_made %> / <%= auto_low_attempts %></h4>
+        <table class="table">
+          <tr>
+            <th>PC</th>
+            <th>CF</th>
+            <th>M</th>
+            <th>RP</th>
+            <th>DB</th>
+            <th>SP</th>
+            <th>RW</th>
+            <th>RT</th>
+            <th>LB</th>
+          </tr>
+          <tr>
+            <td><%= auto_a1_success %> / <%= auto_a1_attempts %></td>
+            <td><%= auto_a2_success %> / <%= auto_a2_attempts %></td>
+            <td><%= auto_b1_success %> / <%= auto_b1_attempts %></td>
+            <td><%= auto_b2_success %> / <%= auto_b2_attempts %></td>
+            <td><%= auto_c1_success %> / <%= auto_c1_attempts %></td>
+            <td><%= auto_c2_success %> / <%= auto_c2_attempts %></td>
+            <td><%= auto_d1_success %> / <%= auto_d1_attempts %></td>
+            <td><%= auto_d2_success %> / <%= auto_d2_attempts %></td>
+            <td><%= auto_lb_success %> / <%= auto_lb_attempts %></td>
+          </tr>
+        </table>
+        <h3><u>Teleop Data</u></h3>
+        <h4 style="margin-top:0;">High Goals: <%= tele_high_made %> / <%= tele_high_attempts %></h4>
+        <h4 style="margin-top:0;">Low Goals: <%= tele_low_made %> / <%= tele_low_attempts %></h4>
+        <h4 style="margin-top:0;">Driver Rating: <%= avg_driver_rating %></h4>
+        <h4 style="margin-top:0;">Bully Rating: <%= avg_bully_rating %></h4>
+        <h4 style="margin-top:0;">Knockouts: <%= knockouts %></h4>
+        <h4 style="margin-top:0;">Deads: <%= deads %></h4>
+        <h4 style="margin-top:0;">Fouls: <%= fouls %></h4>
+        <table class="table">
+          <tr>
+            <th />
+            <th>Results</th>
+            <th>Rating</th>
+            <th>Assist</th>
+            <th>Stuck</th>
+          </tr>
+          <tr>
+            <th>PC</th>
+            <td><%= a1_success %> / <%= a1_attempts %></td>
+            <td><%= a1_rating %></td>
+            <td><%= a1_assist %></td>
+            <td><%= a1_stuck %></td>
+          </tr>
+          <tr>
+            <th>CF</th>
+            <td><%= a2_success %> / <%= a2_attempts %></td>
+            <td><%= a2_rating %></td>
+            <td><%= a2_assist %></td>
+            <td><%= a2_stuck %></td>
+          </tr>
+          <tr>
+            <th>M</th>
+            <td><%= b1_success %> / <%= b1_attempts %></td>
+            <td><%= b1_rating %></td>
+            <td><%= b1_assist %></td>
+            <td><%= b1_stuck %></td>
+          </tr>
+          <tr>
+            <th>RP</th>
+            <td><%= b2_success %> / <%= b2_attempts %></td>
+            <td><%= b2_rating %></td>
+            <td><%= b2_assist %></td>
+            <td><%= b2_stuck %></td>
+          </tr>
+          <tr>
+            <th>DB</th>
+            <td><%= c1_success %> / <%= c1_attempts %></td>
+            <td><%= c1_rating %></td>
+            <td><%= c1_assist %></td>
+            <td><%= c1_stuck %></td>
+          </tr>
+          <tr>
+            <th>SP</th>
+            <td><%= c2_success %> / <%= c2_attempts %></td>
+            <td><%= c2_rating %></td>
+            <td><%= c2_assist %></td>
+            <td><%= c2_stuck %></td>
+          </tr>
+          <tr>
+            <th>RW</th>
+            <td><%= d1_success %> / <%= d1_attempts %></td>
+            <td><%= d1_rating %></td>
+            <td><%= d1_assist %></td>
+            <td><%= d1_stuck %></td>
+          </tr>
+          <tr>
+            <th>RT</th>
+            <td><%= d2_success %> / <%= d2_attempts %></td>
+            <td><%= d2_rating %></td>
+            <td><%= d2_assist %></td>
+            <td><%= d2_stuck %></td>
+          </tr>
+          <tr>
+            <th>LB</th>
+            <td><%= lb_success %> / <%= lb_attempts %></td>
+            <td><%= lb_rating %></td>
+            <td><%= lb_assist %></td>
+            <td><%= lb_stuck %></td>
+          </tr>
+        </table>
+        <h3><u>End Game</u></h3>
+        <h4 style="margin-top:0;">Hang: <%= hang_success %> / <%= hang_attempts %></h4>
+        <h4 style="margin-top:0;">Challenge: <%= challenge_success %> / <%= challenge_attempts %></h4>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+</body>
+</html>

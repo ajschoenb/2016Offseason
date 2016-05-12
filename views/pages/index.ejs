@@ -1,0 +1,49 @@
+<DOCTYPE! html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+  <% include ../partials/head.ejs %>
+</head>
+<body class="container">
+  <header>
+    <% include ../partials/header.ejs %>
+  </header>
+
+  <main style="padding-top: 60px;">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Team List</div>
+
+          <table class="table">
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+            </tr>
+            <%- team_list %>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Contrib. Score Rank</div>
+
+          <table class="table">
+            <tr>
+              <th>Number</th>
+              <th>Contrib. Score</th>
+              <th>Avg. Driver Rating</th>
+            </tr>
+            <%- score_list %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+</body>
+</html>

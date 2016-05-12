@@ -1,0 +1,19 @@
+<!-- views/partials/footer.ejs -->
+
+<!-- jQuery -->
+<script src="../js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../js/bootstrap.min.js"></script>
+
+<div class="row">
+    <p class="text-center text-muted"> <br />FRC Team 118: The Robonauts<br />© Copyright 2016</p>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.document.location = $(this).data("href");
+        });
+    });
+</script>

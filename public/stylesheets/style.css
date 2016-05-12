@@ -1,0 +1,75 @@
+html {
+overflow-x: hidden;
+}
+
+.navlinks {
+	color:white;
+}
+
+.navlinks:hover {
+	color: black;
+}
+
+
+.tnav .navbar .container {
+    min-height: 10px !important;
+}
+
+.inline {
+    display: inline-block;
+}
+
+#coverup-bg {
+    background: rgb(34,34,34); /* for IE */
+    background: rgba(34,34,34,0.7);
+    width: 60%;
+    -webkit-filter: blur(.3px);
+    z-index: 99;
+
+  filter: url('/media/blur.svg#blur');
+  filter: blur(10px);
+}
+
+#coverup {
+  /* Put this on top of the blurred layer */
+    position: relative;
+    z-index: 100;
+    padding: 20px;
+    background: rgb(34,34,34); /* for IE */
+    background: rgba(34,34,34,0.7);
+    z-index: 100;
+}
+
+.invert{
+   -webkit-filter: invert(1);
+   filter: invert(1);
+}
+
+.clickable-row {
+    cursor:pointer;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 80%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  background: red;
+  cursor: inherit;
+  display: block;
+}
+input[readonly] {
+  background-color: white !important;
+  cursor: text !important;
+}
+
+
