@@ -1,0 +1,47 @@
+<DOCTYPE! html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+  <% include ../partials/head.ejs %>
+</head>
+<body class="container">
+  <header>
+    <% include ../partials/header.ejs %>
+  </header>
+
+  <main style="padding-top: 60px;">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <%- message %>
+        <form id="sql_query" method="post" action="/query">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-10 col-xs-offset-1">
+                <div class="input-group-md">
+                  <label class="control-label">SQL Query</label>
+                  <textarea tabindex="1" class="form-control" name="query" rows="8" required></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-11">
+                <input tabindex="2" style="float:right;" type="submit" class="btn btn-success" value="Query" />
+              </div>
+            </div>
+          </div>
+        </form>
+        <div id="res-wrapper" style="overflow-x:scroll;">
+          <h4 style="text-align:center;"><strong>SQL Result</strong></h4>
+          <table class="table">
+            <%- result %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+</body>
+</html>

@@ -7,6 +7,8 @@ function rest_router(router, connection, md5) {
 
 rest_router.prototype.handleRoutes = function(router, connection, md5) {
   var most_recent = 0;
+  var query_bool = 0;
+  var query_res = "";
 
   router.get("/", function(req, res) {
     var score_list, score_sql, team_list, team_sql;
@@ -37,6 +39,52 @@ rest_router.prototype.handleRoutes = function(router, connection, md5) {
       message = "<div class=\"alert alert-success\" role=\"alert\"><p>Data for <b>"+ most_recent +"</b> has been <b>successfully</b> entered.</p></div>";
     res.render("pages/data_entry", {
       message: message
+    });
+  });
+  router.get("/sql", function(req, res) {
+    var message = "";
+    if(query_bool == -1)
+      message = "<div class=\"alert alert-danger\" role=\"alert\"><p><b>Oh snap</b>, looks like there's a mistake in your query. Data not queried.</p></div>";
+    else if(query_bool != -1 && query_bool != 0)
+      message = "<div class=\"alert alert-success\" role=\"alert\"><p>Data has been <b>successfully</b> queried.</p></div>";
+    res.render("pages/sql", {
+      message: message,
+      result: query_res
+    });
+    if(query_bool == 1)
+    {
+      query_res = "";
+      query_bool = 0;
+    }
+  });
+  router.post("/query", function(req, res) {
+    var sql = req.body.query;
+    query_res = "";
+    connection.query(sql, function(err, rows, fields) {
+      if(err)
+      {
+        console.log(err);
+        query_bool = -1;
+      }
+      else
+      {
+        query_bool = 1;
+        query_res += "<tr>";
+        for(var p in rows[0])
+        {
+          query_res += "<th>" + p + "</th>";
+        }
+        for(var i in rows)
+        {
+          query_res += "</tr><tr>";
+          for(var p in rows[i])
+          {
+            query_res += "<td>" + rows[i][p] + "</td>";
+          }
+          query_res += "</tr>";
+        }
+      }
+      res.redirect("/sql");
     });
   });
   router.post("/parse-data", function(req, res) {
@@ -438,130 +486,130 @@ rest_router.prototype.handleRoutes = function(router, connection, md5) {
 
   router.get("/alliance/:team_1,:team_2,:team_3", function(req, res) {
     console.log(req.params.team_1 + ", " + req.params.team_2 + ", " + req.params.team_3);
-    var team_number = req.params.team_1;
-    var team_name = "";
-    var avg_auto_score = 0;
-    var avg_contrib_score = 0;
-    var floor_intakes = 0;
-    var high_made = 0;
-    var high_attempts = 0;
-    var low_made = 0;
-    var low_attempts = 0;
-    var auto_high_made = 0;
-    var auto_high_attempts = 0;
-    var auto_low_made = 0;
-    var auto_low_attempts = 0;
-    var auto_reaches = 0;
-    var tot_hang = 0;
-    var tot_hang_attempts = 0;
-    var tot_challenge = 0;
-    var tot_challenge_attempts = 0;
-    var defense_success = [];
-    var defense_attempts = [];
-    var defense_stuck = [];
-    var defense_assist = [];
-    var defense_speed = [];
-    var auto_defense_success = [];
-    var auto_defense_attempts = [];
-    var knockouts = 0;
-    var avg_driver_rating = 0;
-    var avg_bully_rating = 0;
-    var fouls = 0;
-    var deads = 0;
-    var team_sql = "SELECT * FROM teams WHERE team_number=" + team_number;
-    connection.query(team_sql, function(err, rows, fields) {
-      team_name = rows[0].team_name;
-      avg_auto_score = rows[0].avg_auton_score;
-      avg_contrib_score = rows[0].avg_contrib_score;
-      floor_intakes = rows[0].avg_floor_intakes;
-      high_made = rows[0].avg_high_made;
-      high_attempts = rows[0].avg_high_attempts;
-      low_made = rows[0].avg_low_made;
-      low_attempts = rows[0].avg_low_attempts;
-      auto_high_made = rows[0].auton_high_made;
-      auto_high_attempts = rows[0].auton_high_attempts;
-      auto_low_made = rows[0].auton_low_made;
-      auto_low_attempts = rows[0].auton_low_attempts;
-      auto_reaches = rows[0].auton_reaches_total;
-      tot_hang = rows[0].total_hangs;
-      tot_hang_attempts = rows[0].total_hang_attempts;
-      tot_challenge = rows[0].total_challenges;
-      tot_challenge_attempts = rows[0].total_challenge_attempts;
-      defense_success[0] = rows[0].tot_a1_successful;
-      defense_attempts[0] = rows[0].tot_a1_attempts;
-      defense_stuck[0] = rows[0].tot_a1_stuck;
-      defense_assist[0] = rows[0].tot_a1_assisted;
-      defense_speed[0] = rows[0].avg_a1_speed;
-      defense_success[1] = rows[0].tot_a2_successful;
-      defense_attempts[1] = rows[0].tot_a2_attempts;
-      defense_stuck[1] = rows[0].tot_a2_stuck;
-      defense_assist[1] = rows[0].tot_a2_assisted;
-      defense_speed[1] = rows[0].avg_a2_speed;
-      defense_success[2] = rows[0].tot_b1_successful;
-      defense_attempts[2] = rows[0].tot_b1_attempts;
-      defense_stuck[2] = rows[0].tot_b1_stuck;
-      defense_assist[2] = rows[0].tot_b1_assisted;
-      defense_speed[2] = rows[0].avg_b1_speed;
-      defense_success[3] = rows[0].tot_b2_successful;
-      defense_attempts[3] = rows[0].tot_b2_attempts;
-      defense_stuck[3] = rows[0].tot_b2_stuck;
-      defense_assist[3] = rows[0].tot_b2_assisted;
-      defense_speed[3] = rows[0].avg_b2_speed;
-      defense_success[4] = rows[0].tot_c1_successful;
-      defense_attempts[4] = rows[0].tot_c1_attempts;
-      defense_stuck[4] = rows[0].tot_c1_stuck;
-      defense_assist[4] = rows[0].tot_c1_assisted;
-      defense_speed[4] = rows[0].avg_c1_speed;
-      defense_success[5] = rows[0].tot_c2_successful;
-      defense_attempts[5] = rows[0].tot_c2_attempts;
-      defense_stuck[5] = rows[0].tot_c2_stuck;
-      defense_assist[5] = rows[0].tot_c2_assisted;
-      defense_speed[5] = rows[0].avg_c2_speed;
-      defense_success[6] = rows[0].tot_d1_successful;
-      defense_attempts[6] = rows[0].tot_d1_attempts;
-      defense_stuck[6] = rows[0].tot_d1_stuck;
-      defense_assist[6] = rows[0].tot_d1_assisted;
-      defense_speed[6] = rows[0].avg_d1_speed;
-      defense_success[7] = rows[0].tot_d2_successful;
-      defense_attempts[7] = rows[0].tot_d2_attempts;
-      defense_stuck[7] = rows[0].tot_d2_stuck;
-      defense_assist[7] = rows[0].tot_d2_assisted;
-      defense_speed[7] = rows[0].avg_d2_speed;
-      defense_success[8] = rows[0].tot_lb_successful;
-      defense_attempts[8] = rows[0].tot_lb_attempts;
-      defense_stuck[8] = rows[0].tot_lb_stuck;
-      defense_assist[8] = rows[0].tot_lb_assisted;
-      defense_speed[8] = rows[0].avg_lb_speed;
-      auto_defense_success[0] = rows[0].auton_a1;
-      auto_defense_attempts[0] = rows[0].auton_a1_attempts;
-      auto_defense_success[1] = rows[0].auton_a2;
-      auto_defense_attempts[1] = rows[0].auton_a2_attempts;
-      auto_defense_success[2] = rows[0].auton_b1;
-      auto_defense_attempts[2] = rows[0].auton_b1_attempts;
-      auto_defense_success[3] = rows[0].auton_b2;
-      auto_defense_attempts[3] = rows[0].auton_b2_attempts;
-      auto_defense_success[4] = rows[0].auton_c1;
-      auto_defense_attempts[4] = rows[0].auton_c1_attempts;
-      auto_defense_success[5] = rows[0].auton_c2;
-      auto_defense_attempts[5] = rows[0].auton_c2_attempts;
-      auto_defense_success[6] = rows[0].auton_d1;
-      auto_defense_attempts[6] = rows[0].auton_d1_attempts;
-      auto_defense_success[7] = rows[0].auton_d2;
-      auto_defense_attempts[7] = rows[0].auton_d2_attempts;
-      auto_defense_success[8] = rows[0].auton_lb;
-      auto_defense_attempts[8] = rows[0].auton_lb_attempts;
-      knockouts = rows[0].total_knockouts;
-      avg_driver_rating = rows[0].avg_driver_rating;
-      avg_bully_rating = rows[0].avg_bully_rating;
-      fouls = rows[0].total_fouls;
-      deads = rows[0].tot_dead;
+    var team_number_1 = req.params.team_1;
+    var team_name_1 = "";
+    var avg_auto_score_1 = 0;
+    var avg_contrib_score_1 = 0;
+    var floor_intakes_1 = 0;
+    var high_made_1 = 0;
+    var high_attempts_1 = 0;
+    var low_made_1 = 0;
+    var low_attempts_1 = 0;
+    var auto_high_made_1 = 0;
+    var auto_high_attempts_1 = 0;
+    var auto_low_made_1 = 0;
+    var auto_low_attempts_1 = 0;
+    var auto_reaches_1 = 0;
+    var tot_hang_1 = 0;
+    var tot_hang_attempts_1 = 0;
+    var tot_challenge_1 = 0;
+    var tot_challenge_attempts_1 = 0;
+    var defense_success_1 = [];
+    var defense_attempts_1 = [];
+    var defense_stuck_1 = [];
+    var defense_assist_1 = [];
+    var defense_speed_1 = [];
+    var auto_defense_success_1 = [];
+    var auto_defense_attempts_1 = [];
+    var knockouts_1 = 0;
+    var avg_driver_rating_1 = 0;
+    var avg_bully_rating_1 = 0;
+    var fouls_1 = 0;
+    var deads_1 = 0;
+    var team_sql_1 = "SELECT * FROM teams WHERE team_number=" + team_number_1;
+    connection.query(team_sql_1, function(err, rows, fields) {
+      team_name_1 = rows[0].team_name;
+      avg_auto_score_1 = rows[0].avg_auton_score;
+      avg_contrib_score_1 = rows[0].avg_contrib_score;
+      floor_intakes_1 = rows[0].avg_floor_intakes;
+      high_made_1 = rows[0].avg_high_made;
+      high_attempts_1 = rows[0].avg_high_attempts;
+      low_made_1 = rows[0].avg_low_made;
+      low_attempts_1 = rows[0].avg_low_attempts;
+      auto_high_made_1 = rows[0].auton_high_made;
+      auto_high_attempts_1 = rows[0].auton_high_attempts;
+      auto_low_made_1 = rows[0].auton_low_made;
+      auto_low_attempts_1 = rows[0].auton_low_attempts;
+      auto_reaches_1 = rows[0].auton_reaches_total;
+      tot_hang_1 = rows[0].total_hangs;
+      tot_hang_attempts_1 = rows[0].total_hang_attempts;
+      tot_challenge_1 = rows[0].total_challenges;
+      tot_challenge_attempts_1 = rows[0].total_challenge_attempts;
+      defense_success_1[0] = rows[0].tot_a1_successful;
+      defense_attempts_1[0] = rows[0].tot_a1_attempts;
+      defense_stuck_1[0] = rows[0].tot_a1_stuck;
+      defense_assist_1[0] = rows[0].tot_a1_assisted;
+      defense_speed_1[0] = rows[0].avg_a1_speed;
+      defense_success_1[1] = rows[0].tot_a2_successful;
+      defense_attempts_1[1] = rows[0].tot_a2_attempts;
+      defense_stuck_1[1] = rows[0].tot_a2_stuck;
+      defense_assist_1[1] = rows[0].tot_a2_assisted;
+      defense_speed_1[1] = rows[0].avg_a2_speed;
+      defense_success_1[2] = rows[0].tot_b1_successful;
+      defense_attempts_1[2] = rows[0].tot_b1_attempts;
+      defense_stuck_1[2] = rows[0].tot_b1_stuck;
+      defense_assist_1[2] = rows[0].tot_b1_assisted;
+      defense_speed_1[2] = rows[0].avg_b1_speed;
+      defense_success_1[3] = rows[0].tot_b2_successful;
+      defense_attempts_1[3] = rows[0].tot_b2_attempts;
+      defense_stuck_1[3] = rows[0].tot_b2_stuck;
+      defense_assist_1[3] = rows[0].tot_b2_assisted;
+      defense_speed_1[3] = rows[0].avg_b2_speed;
+      defense_success_1[4] = rows[0].tot_c1_successful;
+      defense_attempts_1[4] = rows[0].tot_c1_attempts;
+      defense_stuck_1[4] = rows[0].tot_c1_stuck;
+      defense_assist_1[4] = rows[0].tot_c1_assisted;
+      defense_speed_1[4] = rows[0].avg_c1_speed;
+      defense_success_1[5] = rows[0].tot_c2_successful;
+      defense_attempts_1[5] = rows[0].tot_c2_attempts;
+      defense_stuck_1[5] = rows[0].tot_c2_stuck;
+      defense_assist_1[5] = rows[0].tot_c2_assisted;
+      defense_speed_1[5] = rows[0].avg_c2_speed;
+      defense_success_1[6] = rows[0].tot_d1_successful;
+      defense_attempts_1[6] = rows[0].tot_d1_attempts;
+      defense_stuck_1[6] = rows[0].tot_d1_stuck;
+      defense_assist_1[6] = rows[0].tot_d1_assisted;
+      defense_speed_1[6] = rows[0].avg_d1_speed;
+      defense_success_1[7] = rows[0].tot_d2_successful;
+      defense_attempts_1[7] = rows[0].tot_d2_attempts;
+      defense_stuck_1[7] = rows[0].tot_d2_stuck;
+      defense_assist_1[7] = rows[0].tot_d2_assisted;
+      defense_speed_1[7] = rows[0].avg_d2_speed;
+      defense_success_1[8] = rows[0].tot_lb_successful;
+      defense_attempts_1[8] = rows[0].tot_lb_attempts;
+      defense_stuck_1[8] = rows[0].tot_lb_stuck;
+      defense_assist_1[8] = rows[0].tot_lb_assisted;
+      defense_speed_1[8] = rows[0].avg_lb_speed;
+      auto_defense_success_1[0] = rows[0].auton_a1;
+      auto_defense_attempts_1[0] = rows[0].auton_a1_attempts;
+      auto_defense_success_1[1] = rows[0].auton_a2;
+      auto_defense_attempts_1[1] = rows[0].auton_a2_attempts;
+      auto_defense_success_1[2] = rows[0].auton_b1;
+      auto_defense_attempts_1[2] = rows[0].auton_b1_attempts;
+      auto_defense_success_1[3] = rows[0].auton_b2;
+      auto_defense_attempts_1[3] = rows[0].auton_b2_attempts;
+      auto_defense_success_1[4] = rows[0].auton_c1;
+      auto_defense_attempts_1[4] = rows[0].auton_c1_attempts;
+      auto_defense_success_1[5] = rows[0].auton_c2;
+      auto_defense_attempts_1[5] = rows[0].auton_c2_attempts;
+      auto_defense_success_1[6] = rows[0].auton_d1;
+      auto_defense_attempts_1[6] = rows[0].auton_d1_attempts;
+      auto_defense_success_1[7] = rows[0].auton_d2;
+      auto_defense_attempts_1[7] = rows[0].auton_d2_attempts;
+      auto_defense_success_1[8] = rows[0].auton_lb;
+      auto_defense_attempts_1[8] = rows[0].auton_lb_attempts;
+      knockouts_1 = rows[0].total_knockouts;
+      avg_driver_rating_1 = rows[0].avg_driver_rating;
+      avg_bully_rating_1 = rows[0].avg_bully_rating;
+      fouls_1 = rows[0].total_fouls;
+      deads_1 = rows[0].tot_dead;
     });
-    var no_auto_sql = "SELECT * FROM matches WHERE team_number = " + team_number + " AND auton_score = 0"
-    var no_autos = 0;
-    connection.query(no_auto_sql, function(err, rows, fields) {
+    var no_auto_sql_1 = "SELECT * FROM matches WHERE team_number = " + team_number_1 + " AND auton_score = 0"
+    var no_autos_1 = 0;
+    connection.query(no_auto_sql_1, function(err, rows, fields) {
       for(var x in rows)
       {
-        no_autos++;
+        no_autos_1++;
       }
     });
 
@@ -810,7 +858,7 @@ rest_router.prototype.handleRoutes = function(router, connection, md5) {
       fouls_3 = rows[0].total_fouls;
       deads_3 = rows[0].tot_dead;
     });
-    var no_auto_sql_3 = "SELECT * FROM matches WHERE team_number = " + team_number + " AND auton_score = 0"
+    var no_auto_sql_3 = "SELECT * FROM matches WHERE team_number = " + team_number_3 + " AND auton_score = 0"
     var no_autos_3 = 0;
     connection.query(no_auto_sql_3, function(err, rows, fields) {
       for(var x in rows) {
@@ -818,92 +866,92 @@ rest_router.prototype.handleRoutes = function(router, connection, md5) {
       }
 
       res.render("pages/alliance", {
-        team_number: team_number,
-        team_name: team_name,
-        avg_auto_score: avg_auto_score,
-        avg_contrib_score: avg_contrib_score,
-        no_autos: no_autos,
-        auto_reaches: auto_reaches,
-        auto_high_made: auto_high_made,
-        auto_high_attempts: auto_high_attempts,
-        auto_low_made: auto_low_made,
-        auto_low_attempts: auto_low_attempts,
-        auto_a1_success: auto_defense_success[0],
-        auto_a1_attempts: auto_defense_attempts[0],
-        auto_a2_success: auto_defense_success[1],
-        auto_a2_attempts: auto_defense_attempts[1],
-        auto_b1_success: auto_defense_success[2],
-        auto_b1_attempts: auto_defense_attempts[2],
-        auto_b2_success: auto_defense_success[3],
-        auto_b2_attempts: auto_defense_attempts[3],
-        auto_c1_success: auto_defense_success[4],
-        auto_c1_attempts: auto_defense_attempts[4],
-        auto_c2_success: auto_defense_success[5],
-        auto_c2_attempts: auto_defense_attempts[5],
-        auto_d1_success: auto_defense_success[6],
-        auto_d1_attempts: auto_defense_attempts[6],
-        auto_d2_success: auto_defense_success[7],
-        auto_d2_attempts: auto_defense_attempts[7],
-        auto_lb_success: auto_defense_success[8],
-        auto_lb_attempts: auto_defense_attempts[8],
-        tele_high_made: high_made,
-        tele_high_attempts: high_attempts,
-        tele_low_made: low_made,
-        tele_low_attempts: low_attempts,
-        avg_driver_rating: avg_driver_rating,
-        avg_bully_rating: avg_bully_rating,
-        knockouts: knockouts,
-        deads: deads,
-        fouls: fouls,
-        a1_success: defense_success[0],
-        a1_attempts: defense_attempts[0],
-        a1_rating: defense_speed[0],
-        a1_assist: defense_assist[0],
-        a1_stuck: defense_stuck[0],
-        a2_success: defense_success[1],
-        a2_attempts: defense_attempts[1],
-        a2_rating: defense_speed[1],
-        a2_assist: defense_assist[1],
-        a2_stuck: defense_stuck[1],
-        b1_success: defense_success[2],
-        b1_attempts: defense_attempts[2],
-        b1_rating: defense_speed[2],
-        b1_assist: defense_assist[2],
-        b1_stuck: defense_stuck[2],
-        b2_success: defense_success[3],
-        b2_attempts: defense_attempts[3],
-        b2_rating: defense_speed[3],
-        b2_assist: defense_assist[3],
-        b2_stuck: defense_stuck[3],
-        c1_success: defense_success[4],
-        c1_attempts: defense_attempts[4],
-        c1_rating: defense_speed[4],
-        c1_assist: defense_assist[4],
-        c1_stuck: defense_stuck[4],
-        c2_success: defense_success[5],
-        c2_attempts: defense_attempts[5],
-        c2_rating: defense_speed[5],
-        c2_assist: defense_assist[5],
-        c2_stuck: defense_stuck[5],
-        d1_success: defense_success[6],
-        d1_attempts: defense_attempts[6],
-        d1_rating: defense_speed[6],
-        d1_assist: defense_assist[6],
-        d1_stuck: defense_stuck[6],
-        d2_success: defense_success[7],
-        d2_attempts: defense_attempts[7],
-        d2_rating: defense_speed[7],
-        d2_assist: defense_assist[7],
-        d2_stuck: defense_stuck[7],
-        lb_success: defense_success[8],
-        lb_attempts: defense_attempts[8],
-        lb_rating: defense_speed[8],
-        lb_assist: defense_assist[8],
-        lb_stuck: defense_stuck[8],
-        hang_success: tot_hang,
-        hang_attempts: tot_hang_attempts,
-        challenge_success: tot_challenge,
-        challenge_attempts: tot_challenge_attempts,
+        team_number_1: team_number_1,
+        team_name_1: team_name_1,
+        avg_auto_score_1: avg_auto_score_1,
+        avg_contrib_score_1: avg_contrib_score_1,
+        no_autos_1: no_autos_1,
+        auto_reaches_1: auto_reaches_1,
+        auto_high_made_1: auto_high_made_1,
+        auto_high_attempts_1: auto_high_attempts_1,
+        auto_low_made_1: auto_low_made_1,
+        auto_low_attempts_1: auto_low_attempts_1,
+        auto_a1_success_1: auto_defense_success_1[0],
+        auto_a1_attempts_1: auto_defense_attempts_1[0],
+        auto_a2_success_1: auto_defense_success_1[1],
+        auto_a2_attempts_1: auto_defense_attempts_1[1],
+        auto_b1_success_1: auto_defense_success_1[2],
+        auto_b1_attempts_1: auto_defense_attempts_1[2],
+        auto_b2_success_1: auto_defense_success_1[3],
+        auto_b2_attempts_1: auto_defense_attempts_1[3],
+        auto_c1_success_1: auto_defense_success_1[4],
+        auto_c1_attempts_1: auto_defense_attempts_1[4],
+        auto_c2_success_1: auto_defense_success_1[5],
+        auto_c2_attempts_1: auto_defense_attempts_1[5],
+        auto_d1_success_1: auto_defense_success_1[6],
+        auto_d1_attempts_1: auto_defense_attempts_1[6],
+        auto_d2_success_1: auto_defense_success_1[7],
+        auto_d2_attempts_1: auto_defense_attempts_1[7],
+        auto_lb_success_1: auto_defense_success_1[8],
+        auto_lb_attempts_1: auto_defense_attempts_1[8],
+        tele_high_made_1: high_made_1,
+        tele_high_attempts_1: high_attempts_1,
+        tele_low_made_1: low_made_1,
+        tele_low_attempts_1: low_attempts_1,
+        avg_driver_rating_1: avg_driver_rating_1,
+        avg_bully_rating_1: avg_bully_rating_1,
+        knockouts_1: knockouts_1,
+        deads_1: deads_1,
+        fouls_1: fouls_1,
+        a1_success_1: defense_success_1[0],
+        a1_attempts_1: defense_attempts_1[0],
+        a1_rating_1: defense_speed_1[0],
+        a1_assist_1: defense_assist_1[0],
+        a1_stuck_1: defense_stuck_1[0],
+        a2_success_1: defense_success_1[1],
+        a2_attempts_1: defense_attempts_1[1],
+        a2_rating_1: defense_speed_1[1],
+        a2_assist_1: defense_assist_1[1],
+        a2_stuck_1: defense_stuck_1[1],
+        b1_success_1: defense_success_1[2],
+        b1_attempts_1: defense_attempts_1[2],
+        b1_rating_1: defense_speed_1[2],
+        b1_assist_1: defense_assist_1[2],
+        b1_stuck_1: defense_stuck_1[2],
+        b2_success_1: defense_success_1[3],
+        b2_attempts_1: defense_attempts_1[3],
+        b2_rating_1: defense_speed_1[3],
+        b2_assist_1: defense_assist_1[3],
+        b2_stuck_1: defense_stuck_1[3],
+        c1_success_1: defense_success_1[4],
+        c1_attempts_1: defense_attempts_1[4],
+        c1_rating_1: defense_speed_1[4],
+        c1_assist_1: defense_assist_1[4],
+        c1_stuck_1: defense_stuck_1[4],
+        c2_success_1: defense_success_1[5],
+        c2_attempts_1: defense_attempts_1[5],
+        c2_rating_1: defense_speed_1[5],
+        c2_assist_1: defense_assist_1[5],
+        c2_stuck_1: defense_stuck_1[5],
+        d1_success_1: defense_success_1[6],
+        d1_attempts_1: defense_attempts_1[6],
+        d1_rating_1: defense_speed_1[6],
+        d1_assist_1: defense_assist_1[6],
+        d1_stuck_1: defense_stuck_1[6],
+        d2_success_1: defense_success_1[7],
+        d2_attempts_1: defense_attempts_1[7],
+        d2_rating_1: defense_speed_1[7],
+        d2_assist_1: defense_assist_1[7],
+        d2_stuck_1: defense_stuck_1[7],
+        lb_success_1: defense_success_1[8],
+        lb_attempts_1: defense_attempts_1[8],
+        lb_rating_1: defense_speed_1[8],
+        lb_assist_1: defense_assist_1[8],
+        lb_stuck_1: defense_stuck_1[8],
+        hang_success_1: tot_hang_1,
+        hang_attempts_1: tot_hang_attempts_1,
+        challenge_success_1: tot_challenge_1,
+        challenge_attempts_1: tot_challenge_attempts_1,
         team_number_2: team_number_2,
         team_name_2: team_name_2,
         avg_auto_score_2: avg_auto_score_2,
@@ -1200,7 +1248,6 @@ rest_router.prototype.handleRoutes = function(router, connection, md5) {
     "total_fouls=(SELECT SUM(fouls_noticed) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_dead=(SELECT SUM(dead) FROM matches WHERE team_number=" + team_number + ") " +
     "WHERE team_number=" + team_number;
-    // console.log(team_sql);
     connection.query(team_sql, function(err) {
       if(err)
         console.log(err);
