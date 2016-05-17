@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var fs = require("fs");
 
 function rest_router(router, connection, md5) {
   var self = this;
@@ -29,6 +30,32 @@ rest_router.prototype.handleRoutes = function(router, connection, md5) {
         team_list: team_list,
         score_list: score_list
       });
+    });
+  });
+  router.get("/export", function(req, res) {
+    var teams_sql = "SELECT * FROM teams";
+    var filename = "teams.csv";
+    var data = "";
+    connection.query(teams_sql, function(err, rows, fields) {
+      for(var p in rows[0])
+      {
+        data += p + ", ";
+      }
+      data = data.slice(0, data.length - 2); // Remove the extra comma
+      data += "\n";
+      for(var i in rows)
+      {
+        for(var p in rows[i])
+        {
+          data += rows[i][p] + ", ";
+        }
+        data = data.slice(0, data.length - 2); // Remove the extra comma
+        data += "\n";
+      }
+      fs.writeFile(filename, data, function(err) {
+        console.log(err ? err : "File saved to " + __dirname);
+      });
+      res.redirect("/sql");
     });
   });
   router.get("/data-entry", function(req, res) {
