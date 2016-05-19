@@ -30,14 +30,13 @@
             </div>
           </div>
         </form>
-        <div id="res-wrapper" style="overflow-x:scroll;">
+        <div class="table-responsive">
           <h4 style="text-align:center;"><strong>SQL Result</strong></h4>
-          <table class="table">
+          <table class="table table-striped">
             <%- result %>
           </table>
         </div>
         <form id="export_db" method="get" action="/export">
-        <!-- <a href="/export"><h4 style="text-align:center;">Download Database</h4></a> -->
           <div class="form-group">
             <div class="row">
               <div style="padding-top:15px;" align="center">
