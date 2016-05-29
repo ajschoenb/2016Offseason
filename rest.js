@@ -1,12 +1,12 @@
 var mysql = require("mysql");
 var fs = require("fs");
 
-function rest_router(router, connection, md5) {
+function rest_router(router, connection) {
   var self = this;
-  self.handleRoutes(router, connection, md5);
+  self.handleRoutes(router, connection);
 }
 
-rest_router.prototype.handleRoutes = function(router, connection, md5) {
+rest_router.prototype.handleRoutes = function(router, connection) {
   var most_recent = 0;
   var query_bool = 0;
   var query_res = "";

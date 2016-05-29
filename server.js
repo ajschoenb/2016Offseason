@@ -1,12 +1,15 @@
+const electron = require("electron").app;
+const {BrowserWindow} = require("electron");
 var mysql = require("mysql");
-var rest = require("./REST.js");
-var md5 = require("MD5");
+var rest = require("./rest.js");
 var express = require("express");
 var bodyParser = require("body-parser");
 app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+
+let win;
 
 function REST() {
   var self;
@@ -20,7 +23,7 @@ REST.prototype.connectMysql = function() {
     connectionLimit: 100,
     host: "127.0.0.1",
     user: "root",
-    password: "",
+    password: "root",
     database: "frcscout2016",
     debug: false
   });
@@ -38,7 +41,7 @@ REST.prototype.configureExpress = function(connection) {
   app.use(bodyParser.json());
   router = express.Router();
   app.use("/", router);
-  var rest_router = new rest(router, connection, md5);
+  var rest_router = new rest(router, connection);
   self.startServer();
 };
 
@@ -55,3 +58,13 @@ REST.prototype.stop = function(err) {
 };
 
 new REST;
+
+// Actually start the window
+electron.on("ready", function() {
+  win = new BrowserWindow({
+    height: 10000,
+    width: 10000,
+    icon: __dirname + "/118.png"
+  });
+  win.loadURL("http://localhost:8080"); // Load homepage
+});
