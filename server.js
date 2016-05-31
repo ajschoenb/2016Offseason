@@ -23,7 +23,7 @@ REST.prototype.connectMysql = function() {
     connectionLimit: 100,
     host: "127.0.0.1",
     user: "root",
-    password: "root",
+    password: "",
     database: "frcscout2016",
     debug: false
   });
@@ -62,8 +62,7 @@ new REST;
 // Actually start the window
 electron.on("ready", function() {
   win = new BrowserWindow({
-    height: 10000,
-    width: 10000,
+    fullscreen: true,
     icon: __dirname + "/118.png"
   });
   win.loadURL("http://localhost:8080"); // Load homepage
