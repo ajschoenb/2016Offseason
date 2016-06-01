@@ -6,8 +6,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 app = express();
 
+app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 
 let win;
 
@@ -62,8 +63,8 @@ new REST;
 // Actually start the window
 electron.on("ready", function() {
   win = new BrowserWindow({
-    fullscreen: true,
     icon: __dirname + "/118.png"
   });
+  win.maximize();
   win.loadURL("http://localhost:8080"); // Load homepage
 });

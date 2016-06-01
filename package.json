@@ -10,5 +10,8 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "mysql": "^2.10.2"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0"
   }
 }
