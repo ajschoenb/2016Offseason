@@ -38,18 +38,22 @@
         </table>
         <table class="table">
           <tr>
+            <th>PC</th>
             <th>CF</th>
             <th>M</th>
             <th>RP</th>
+            <th>DB</th>
             <th>SP</th>
             <th>RW</th>
             <th>RT</th>
             <th>LB</th>
           </tr>
           <tr>
+            <td><%= auto_a1_success %> / <%= auto_a1_attempts %></td>
             <td><%= auto_a2_success %> / <%= auto_a2_attempts %></td>
             <td><%= auto_b1_success %> / <%= auto_b1_attempts %></td>
             <td><%= auto_b2_success %> / <%= auto_b2_attempts %></td>
+            <td><%= auto_c1_success %> / <%= auto_c1_attempts %></td>
             <td><%= auto_c2_success %> / <%= auto_c2_attempts %></td>
             <td><%= auto_d1_success %> / <%= auto_d1_attempts %></td>
             <td><%= auto_d2_success %> / <%= auto_d2_attempts %></td>
@@ -84,6 +88,13 @@
             <th>Stuck</th>
           </tr>
           <tr>
+            <th>PC</th>
+            <td><%= a1_success %> / <%= a1_attempts %></td>
+            <td><%= a1_rating %></td>
+            <td><%= a1_assist %></td>
+            <td><%= a1_stuck %></td>
+          </tr>
+          <tr>
             <th>CF</th>
             <td><%= a2_success %> / <%= a2_attempts %></td>
             <td><%= a2_rating %></td>
@@ -103,6 +114,13 @@
             <td><%= b2_rating %></td>
             <td><%= b2_assist %></td>
             <td><%= b2_stuck %></td>
+          </tr>
+          <tr>
+            <th>DB</th>
+            <td><%= c1_success %> / <%= c1_attempts %></td>
+            <td><%= c1_rating %></td>
+            <td><%= c1_assist %></td>
+            <td><%= c1_stuck %></td>
           </tr>
           <tr>
             <th>SP</th>

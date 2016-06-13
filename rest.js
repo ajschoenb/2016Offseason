@@ -126,6 +126,15 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     var lb_success_tmp = lb_success;
     if(lb_success > 2)
       lb_success_tmp = 2;
+    var a1_success = Number(req.body.a1_success);
+    var a1_fail = Number(req.body.a1_fail);
+    var a1_attempts = a1_success + a1_fail;
+    var a1_rating = Number(req.body.a1_rating);
+    var a1_assist = Number(req.body.a1_assist);
+    var a1_stuck = Number(req.body.a1_stuck);
+    var a1_success_tmp = a1_success;
+    if(a1_success > 2)
+      a1_success_tmp = 2;
     var a2_success = Number(req.body.a2_success);
     var a2_fail = Number(req.body.a2_fail);
     var a2_attempts = a2_success + a2_fail;
@@ -153,6 +162,15 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     var b2_success_tmp = b2_success;
     if(b2_success > 2)
       b2_success_tmp = 2;
+    var c1_success = Number(req.body.c1_success);
+    var c1_fail = Number(req.body.c1_fail);
+    var c1_attempts = c1_success + c1_fail;
+    var c1_rating = Number(req.body.c1_rating);
+    var c1_assist = Number(req.body.c1_assist);
+    var c1_stuck = Number(req.body.c1_stuck);
+    var c1_success_tmp = c1_success;
+    if(c1_success > 2)
+      c1_success_tmp = 2;
     var c2_success = Number(req.body.c2_success);
     var c2_fail = Number(req.body.c2_fail);
     var c2_attempts = c2_success + c2_fail;
@@ -206,23 +224,23 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     var auto_low_made = Number(req.body.auto_low_made);
     var auto_low_missed = Number(req.body.auto_low_missed);
     var auto_score = 10*auto_high_made + 5*auto_low_made + 2*auto_defense_reach + (auto_defense_total > 0 ? 10 : 0);
-    var contrib_score = auto_score + 5*high_made + 2*low_made + 5*lb_success_tmp + 5*a2_success_tmp + 5*b1_success_tmp + 5*b2_success_tmp + 5*c2_success_tmp + 5*d1_success_tmp + 5*d2_success_tmp + 5*challenge_success + 15*hang_success;
-    var match_sql = "INSERT INTO matches (team_number, match_number, a2_successful, b1_successful, b2_successful," +
-      "c2_successful, d1_successful, d2_successful, lb_successful, a2_failed, b1_failed, b2_failed, c2_failed, d1_failed," +
-      "d2_failed, lb_failed, a2_attempts, b1_attempts, b2_attempts, c2_attempts, d1_attempts, d2_attempts, lb_attempts," +
-      "a2_total, b1_total, b2_total, c2_total, d1_total, d2_total, lb_total, a2_assists, b1_assists, b2_assists," +
-      "c2_assists, d1_assists, d2_assists, lb_assists, a2_stuck, b1_stuck, b2_stuck, c2_stuck, d1_stuck, d2_stuck," +
+    var contrib_score = auto_score + 5*high_made + 2*low_made + 5*lb_success_tmp + 5*a1_success_tmp + 5*a2_success_tmp + 5*b1_success_tmp + 5*b2_success_tmp + 5*c1_success_tmp + 5*c2_success_tmp + 5*d1_success_tmp + 5*d2_success_tmp + 5*challenge_success + 15*hang_success;
+    var match_sql = "INSERT INTO matches (team_number, match_number, a1_successful, a2_successful, b1_successful, b2_successful," +
+      "c1_successful, c2_successful, d1_successful, d2_successful, lb_successful, a1_failed, a2_failed, b1_failed, b2_failed, c1_failed, c2_failed, d1_failed," +
+      "d2_failed, lb_failed, a1_attempts, a2_attempts, b1_attempts, b2_attempts, c1_attempts, c2_attempts, d1_attempts, d2_attempts, lb_attempts," +
+      "a1_total, a2_total, b1_total, b2_total, c1_total, c2_total, d1_total, d2_total, lb_total, a1_assists, a2_assists, b1_assists, b2_assists," +
+      "c1_assists, c2_assists, d1_assists, d2_assists, lb_assists, a1_stuck, a2_stuck, b1_stuck, b2_stuck, c1_stuck, c2_stuck, d1_stuck, d2_stuck," +
       "lb_stuck, auton_floor_intake, auton_defense_crossed, auton_defense_total, auton_high, auton_high_missed, auton_low, auton_low_missed," +
       "auton_reach, auton_score, tele_high_made, tele_high_missed, tele_forced_miss, tele_low_made, tele_low_missed, tele_hp_high_intake," +
       "tele_hp_high_intake_dropped, tele_floor_intake, tele_knock_out, tele_hang, tele_hang_failed, tele_challenge, tele_challenge_failed," +
       "driver_rating, bully_rating, fouls_noticed, dead, contributed_score) VALUES (" + team_number + ", " + match_number +
-      ", " + a2_success + ", " + b1_success + ", " + b2_success + ", " + c2_success + ", " + d1_success + ", " + d2_success +
-      ", " + lb_success + ", " + a2_fail + ", " + b1_fail + ", " + b2_fail + ", " + c2_fail + ", " + d1_fail +
-      ", " + d2_fail + ", " + lb_fail + ", " + a2_attempts + ", " + b1_attempts + ", " + b2_attempts +
-      ", " + c2_attempts + ", " + d1_attempts + ", " + d2_attempts + ", " + lb_attempts + ", " + a2_rating + ", " + b1_rating +
-      ", " + b2_rating + ", " + c2_rating + ", " + d1_rating + ", " + d2_rating + ", " + lb_rating +
-      ", " + a2_assist + ", " + b1_assist + ", " + b2_assist + ", " + c2_assist + ", " + d1_assist + ", " + d2_assist +
-      ", " + lb_assist + ", " + a2_stuck + ", " + b1_stuck + ", " + b2_stuck + ", " + c2_stuck + ", " + d1_stuck +
+      ", " + a1_success + ", " + a2_success + ", " + b1_success + ", " + b2_success + ", " + c1_success + ", " + c2_success + ", " + d1_success + ", " + d2_success +
+      ", " + lb_success + ", " + a1_fail + ", " + a2_fail + ", " + b1_fail + ", " + b2_fail + ", " + c1_fail + ", " + c2_fail + ", " + d1_fail +
+      ", " + d2_fail + ", " + lb_fail + ", " + a1_attempts + ", " + a2_attempts + ", " + b1_attempts + ", " + b2_attempts +
+      ", " + c1_attempts + ", " + c2_attempts + ", " + d1_attempts + ", " + d2_attempts + ", " + lb_attempts + ", " + a1_rating + ", " + a2_rating + ", " + b1_rating +
+      ", " + b2_rating + ", " + c1_rating + ", " + c2_rating + ", " + d1_rating + ", " + d2_rating + ", " + lb_rating +
+      ", " + a1_assist + ", " + a2_assist + ", " + b1_assist + ", " + b2_assist + ", " + c1_assist + ", " + c2_assist + ", " + d1_assist + ", " + d2_assist +
+      ", " + lb_assist + ", " + a1_stuck + ", " + a2_stuck + ", " + b1_stuck + ", " + b2_stuck + ", " + c1_stuck + ", " + c2_stuck + ", " + d1_stuck +
       ", " + d2_stuck + ", " + lb_stuck + ", " + auto_floor_intakes + ", '" + auto_defense + "', " + auto_defense_total + ", " + auto_high_made +
       ", " + auto_high_missed + ", " + auto_low_made + ", " + auto_low_missed + ", " + auto_defense_reach + ", " + auto_score + ", " + high_made +
       ", " + high_missed + ", " + forced_miss + ", " + low_made + ", " + low_missed + ", " + hp_intakes + ", " + hp_missed + ", " + floor_intakes +
@@ -294,6 +312,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       tot_hang_attempts = rows[0].total_hang_attempts;
       tot_challenge = rows[0].total_challenges;
       tot_challenge_attempts = rows[0].total_challenge_attempts;
+      defense_success[0] = rows[0].tot_a1_successful;
+      defense_attempts[0] = rows[0].tot_a1_attempts;
+      defense_stuck[0] = rows[0].tot_a1_stuck;
+      defense_assist[0] = rows[0].tot_a1_assisted;
+      defense_speed[0] = rows[0].avg_a1_speed;
       defense_success[1] = rows[0].tot_a2_successful;
       defense_attempts[1] = rows[0].tot_a2_attempts;
       defense_stuck[1] = rows[0].tot_a2_stuck;
@@ -309,6 +332,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck[3] = rows[0].tot_b2_stuck;
       defense_assist[3] = rows[0].tot_b2_assisted;
       defense_speed[3] = rows[0].avg_b2_speed;
+      defense_success[4] = rows[0].tot_c1_successful;
+      defense_attempts[4] = rows[0].tot_c1_attempts;
+      defense_stuck[4] = rows[0].tot_c1_stuck;
+      defense_assist[4] = rows[0].tot_c1_assisted;
+      defense_speed[4] = rows[0].avg_c1_speed;
       defense_success[5] = rows[0].tot_c2_successful;
       defense_attempts[5] = rows[0].tot_c2_attempts;
       defense_stuck[5] = rows[0].tot_c2_stuck;
@@ -329,12 +357,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck[8] = rows[0].tot_lb_stuck;
       defense_assist[8] = rows[0].tot_lb_assisted;
       defense_speed[8] = rows[0].avg_lb_speed;
+      auto_defense_success[0] = rows[0].auton_a1;
+      auto_defense_attempts[0] = rows[0].auton_a1_attempts;
       auto_defense_success[1] = rows[0].auton_a2;
       auto_defense_attempts[1] = rows[0].auton_a2_attempts;
       auto_defense_success[2] = rows[0].auton_b1;
       auto_defense_attempts[2] = rows[0].auton_b1_attempts;
       auto_defense_success[3] = rows[0].auton_b2;
       auto_defense_attempts[3] = rows[0].auton_b2_attempts;
+      auto_defense_success[4] = rows[0].auton_c1;
+      auto_defense_attempts[4] = rows[0].auton_c1_attempts;
       auto_defense_success[5] = rows[0].auton_c2;
       auto_defense_attempts[5] = rows[0].auton_c2_attempts;
       auto_defense_success[6] = rows[0].auton_d1;
@@ -408,12 +440,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         auto_high_attempts: auto_high_attempts,
         auto_low_made: auto_low_made,
         auto_low_attempts: auto_low_attempts,
+        auto_a1_success: auto_defense_success[0],
+        auto_a1_attempts: auto_defense_attempts[0],
         auto_a2_success: auto_defense_success[1],
         auto_a2_attempts: auto_defense_attempts[1],
         auto_b1_success: auto_defense_success[2],
         auto_b1_attempts: auto_defense_attempts[2],
         auto_b2_success: auto_defense_success[3],
         auto_b2_attempts: auto_defense_attempts[3],
+        auto_c1_success: auto_defense_success[4],
+        auto_c1_attempts: auto_defense_attempts[4],
         auto_c2_success: auto_defense_success[5],
         auto_c2_attempts: auto_defense_attempts[5],
         auto_d1_success: auto_defense_success[6],
@@ -432,6 +468,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         floor_intakes: floor_intakes,
         deads: deads,
         fouls: fouls,
+        a1_success: defense_success[0],
+        a1_attempts: defense_attempts[0],
+        a1_rating: defense_speed[0],
+        a1_assist: defense_assist[0],
+        a1_stuck: defense_stuck[0],
         a2_success: defense_success[1],
         a2_attempts: defense_attempts[1],
         a2_rating: defense_speed[1],
@@ -447,6 +488,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         b2_rating: defense_speed[3],
         b2_assist: defense_assist[3],
         b2_stuck: defense_stuck[3],
+        c1_success: defense_success[4],
+        c1_attempts: defense_attempts[4],
+        c1_rating: defense_speed[4],
+        c1_assist: defense_assist[4],
+        c1_stuck: defense_stuck[4],
         c2_success: defense_success[5],
         c2_attempts: defense_attempts[5],
         c2_rating: defense_speed[5],
@@ -540,6 +586,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       tot_hang_attempts_1 = rows[0].total_hang_attempts;
       tot_challenge_1 = rows[0].total_challenges;
       tot_challenge_attempts_1 = rows[0].total_challenge_attempts;
+      defense_success_1[0] = rows[0].tot_a1_successful;
+      defense_attempts_1[0] = rows[0].tot_a1_attempts;
+      defense_stuck_1[0] = rows[0].tot_a1_stuck;
+      defense_assist_1[0] = rows[0].tot_a1_assisted;
+      defense_speed_1[0] = rows[0].avg_a1_speed;
       defense_success_1[1] = rows[0].tot_a2_successful;
       defense_attempts_1[1] = rows[0].tot_a2_attempts;
       defense_stuck_1[1] = rows[0].tot_a2_stuck;
@@ -555,6 +606,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck_1[3] = rows[0].tot_b2_stuck;
       defense_assist_1[3] = rows[0].tot_b2_assisted;
       defense_speed_1[3] = rows[0].avg_b2_speed;
+      defense_success_1[4] = rows[0].tot_c1_successful;
+      defense_attempts_1[4] = rows[0].tot_c1_attempts;
+      defense_stuck_1[4] = rows[0].tot_c1_stuck;
+      defense_assist_1[4] = rows[0].tot_c1_assisted;
+      defense_speed_1[4] = rows[0].avg_c1_speed;
       defense_success_1[5] = rows[0].tot_c2_successful;
       defense_attempts_1[5] = rows[0].tot_c2_attempts;
       defense_stuck_1[5] = rows[0].tot_c2_stuck;
@@ -575,12 +631,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck_1[8] = rows[0].tot_lb_stuck;
       defense_assist_1[8] = rows[0].tot_lb_assisted;
       defense_speed_1[8] = rows[0].avg_lb_speed;
+      auto_defense_success_1[0] = rows[0].auton_a1;
+      auto_defense_attempts_1[0] = rows[0].auton_a1_attempts;
       auto_defense_success_1[1] = rows[0].auton_a2;
       auto_defense_attempts_1[1] = rows[0].auton_a2_attempts;
       auto_defense_success_1[2] = rows[0].auton_b1;
       auto_defense_attempts_1[2] = rows[0].auton_b1_attempts;
       auto_defense_success_1[3] = rows[0].auton_b2;
       auto_defense_attempts_1[3] = rows[0].auton_b2_attempts;
+      auto_defense_success_1[4] = rows[0].auton_c1;
+      auto_defense_attempts_1[4] = rows[0].auton_c1_attempts;
       auto_defense_success_1[5] = rows[0].auton_c2;
       auto_defense_attempts_1[5] = rows[0].auton_c2_attempts;
       auto_defense_success_1[6] = rows[0].auton_d1;
@@ -653,6 +713,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       tot_hang_attempts_2 = rows[0].total_hang_attempts;
       tot_challenge_2 = rows[0].total_challenges;
       tot_challenge_attempts_2 = rows[0].total_challenge_attempts;
+      defense_success_2[0] = rows[0].tot_a1_successful;
+      defense_attempts_2[0] = rows[0].tot_a1_attempts;
+      defense_stuck_2[0] = rows[0].tot_a1_stuck;
+      defense_assist_2[0] = rows[0].tot_a1_assisted;
+      defense_speed_2[0] = rows[0].avg_a1_speed;
       defense_success_2[1] = rows[0].tot_a2_successful;
       defense_attempts_2[1] = rows[0].tot_a2_attempts;
       defense_stuck_2[1] = rows[0].tot_a2_stuck;
@@ -668,6 +733,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck_2[3] = rows[0].tot_b2_stuck;
       defense_assist_2[3] = rows[0].tot_b2_assisted;
       defense_speed_2[3] = rows[0].avg_b2_speed;
+      defense_success_2[4] = rows[0].tot_c1_successful;
+      defense_attempts_2[4] = rows[0].tot_c1_attempts;
+      defense_stuck_2[4] = rows[0].tot_c1_stuck;
+      defense_assist_2[4] = rows[0].tot_c1_assisted;
+      defense_speed_2[4] = rows[0].avg_c1_speed;
       defense_success_2[5] = rows[0].tot_c2_successful;
       defense_attempts_2[5] = rows[0].tot_c2_attempts;
       defense_stuck_2[5] = rows[0].tot_c2_stuck;
@@ -688,12 +758,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck_2[8] = rows[0].tot_lb_stuck;
       defense_assist_2[8] = rows[0].tot_lb_assisted;
       defense_speed_2[8] = rows[0].avg_lb_speed;
+      auto_defense_success_2[0] = rows[0].auton_a1;
+      auto_defense_attempts_2[0] = rows[0].auton_a1_attempts;
       auto_defense_success_2[1] = rows[0].auton_a2;
       auto_defense_attempts_2[1] = rows[0].auton_a2_attempts;
       auto_defense_success_2[2] = rows[0].auton_b1;
       auto_defense_attempts_2[2] = rows[0].auton_b1_attempts;
       auto_defense_success_2[3] = rows[0].auton_b2;
       auto_defense_attempts_2[3] = rows[0].auton_b2_attempts;
+      auto_defense_success_2[4] = rows[0].auton_c1;
+      auto_defense_attempts_2[4] = rows[0].auton_c1_attempts;
       auto_defense_success_2[5] = rows[0].auton_c2;
       auto_defense_attempts_2[5] = rows[0].auton_c2_attempts;
       auto_defense_success_2[6] = rows[0].auton_d1;
@@ -766,6 +840,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       tot_hang_attempts_3 = rows[0].total_hang_attempts;
       tot_challenge_3 = rows[0].total_challenges;
       tot_challenge_attempts_3 = rows[0].total_challenge_attempts;
+      defense_success_3[0] = rows[0].tot_a1_successful;
+      defense_attempts_3[0] = rows[0].tot_a1_attempts;
+      defense_stuck_3[0] = rows[0].tot_a1_stuck;
+      defense_assist_3[0] = rows[0].tot_a1_assisted;
+      defense_speed_3[0] = rows[0].avg_a1_speed;
       defense_success_3[1] = rows[0].tot_a2_successful;
       defense_attempts_3[1] = rows[0].tot_a2_attempts;
       defense_stuck_3[1] = rows[0].tot_a2_stuck;
@@ -781,6 +860,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck_3[3] = rows[0].tot_b2_stuck;
       defense_assist_3[3] = rows[0].tot_b2_assisted;
       defense_speed_3[3] = rows[0].avg_b2_speed;
+      defense_success_3[4] = rows[0].tot_c1_successful;
+      defense_attempts_3[4] = rows[0].tot_c1_attempts;
+      defense_stuck_3[4] = rows[0].tot_c1_stuck;
+      defense_assist_3[4] = rows[0].tot_c1_assisted;
+      defense_speed_3[4] = rows[0].avg_c1_speed;
       defense_success_3[5] = rows[0].tot_c2_successful;
       defense_attempts_3[5] = rows[0].tot_c2_attempts;
       defense_stuck_3[5] = rows[0].tot_c2_stuck;
@@ -801,12 +885,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       defense_stuck_3[8] = rows[0].tot_lb_stuck;
       defense_assist_3[8] = rows[0].tot_lb_assisted;
       defense_speed_3[8] = rows[0].avg_lb_speed;
+      auto_defense_success_3[0] = rows[0].auton_a1;
+      auto_defense_attempts_3[0] = rows[0].auton_a1_attempts;
       auto_defense_success_3[1] = rows[0].auton_a2;
       auto_defense_attempts_3[1] = rows[0].auton_a2_attempts;
       auto_defense_success_3[2] = rows[0].auton_b1;
       auto_defense_attempts_3[2] = rows[0].auton_b1_attempts;
       auto_defense_success_3[3] = rows[0].auton_b2;
       auto_defense_attempts_3[3] = rows[0].auton_b2_attempts;
+      auto_defense_success_3[4] = rows[0].auton_c1;
+      auto_defense_attempts_3[4] = rows[0].auton_c1_attempts;
       auto_defense_success_3[5] = rows[0].auton_c2;
       auto_defense_attempts_3[5] = rows[0].auton_c2_attempts;
       auto_defense_success_3[6] = rows[0].auton_d1;
@@ -839,12 +927,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         auto_high_attempts_1: auto_high_attempts_1,
         auto_low_made_1: auto_low_made_1,
         auto_low_attempts_1: auto_low_attempts_1,
+        auto_a1_success_1: auto_defense_success_1[0],
+        auto_a1_attempts_1: auto_defense_attempts_1[0],
         auto_a2_success_1: auto_defense_success_1[1],
         auto_a2_attempts_1: auto_defense_attempts_1[1],
         auto_b1_success_1: auto_defense_success_1[2],
         auto_b1_attempts_1: auto_defense_attempts_1[2],
         auto_b2_success_1: auto_defense_success_1[3],
         auto_b2_attempts_1: auto_defense_attempts_1[3],
+        auto_c1_success_1: auto_defense_success_1[4],
+        auto_c1_attempts_1: auto_defense_attempts_1[4],
         auto_c2_success_1: auto_defense_success_1[5],
         auto_c2_attempts_1: auto_defense_attempts_1[5],
         auto_d1_success_1: auto_defense_success_1[6],
@@ -863,6 +955,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         floor_intakes_1: floor_intakes_1,
         deads_1: deads_1,
         fouls_1: fouls_1,
+        a1_success_1: defense_success_1[0],
+        a1_attempts_1: defense_attempts_1[0],
+        a1_rating_1: defense_speed_1[0],
+        a1_assist_1: defense_assist_1[0],
+        a1_stuck_1: defense_stuck_1[0],
         a2_success_1: defense_success_1[1],
         a2_attempts_1: defense_attempts_1[1],
         a2_rating_1: defense_speed_1[1],
@@ -878,6 +975,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         b2_rating_1: defense_speed_1[3],
         b2_assist_1: defense_assist_1[3],
         b2_stuck_1: defense_stuck_1[3],
+        c1_success_1: defense_success_1[4],
+        c1_attempts_1: defense_attempts_1[4],
+        c1_rating_1: defense_speed_1[4],
+        c1_assist_1: defense_assist_1[4],
+        c1_stuck_1: defense_stuck_1[4],
         c2_success_1: defense_success_1[5],
         c2_attempts_1: defense_attempts_1[5],
         c2_rating_1: defense_speed_1[5],
@@ -912,12 +1014,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         auto_high_attempts_2: auto_high_attempts_2,
         auto_low_made_2: auto_low_made_2,
         auto_low_attempts_2: auto_low_attempts_2,
+        auto_a1_success_2: auto_defense_success_2[0],
+        auto_a1_attempts_2: auto_defense_attempts_2[0],
         auto_a2_success_2: auto_defense_success_2[1],
         auto_a2_attempts_2: auto_defense_attempts_2[1],
         auto_b1_success_2: auto_defense_success_2[2],
         auto_b1_attempts_2: auto_defense_attempts_2[2],
         auto_b2_success_2: auto_defense_success_2[3],
         auto_b2_attempts_2: auto_defense_attempts_2[3],
+        auto_c1_success_2: auto_defense_success_2[4],
+        auto_c1_attempts_2: auto_defense_attempts_2[4],
         auto_c2_success_2: auto_defense_success_2[5],
         auto_c2_attempts_2: auto_defense_attempts_2[5],
         auto_d1_success_2: auto_defense_success_2[6],
@@ -936,6 +1042,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         floor_intakes_2: floor_intakes_2,
         deads_2: deads_2,
         fouls_2: fouls_2,
+        a1_success_2: defense_success_2[0],
+        a1_attempts_2: defense_attempts_2[0],
+        a1_rating_2: defense_speed_2[0],
+        a1_assist_2: defense_assist_2[0],
+        a1_stuck_2: defense_stuck_2[0],
         a2_success_2: defense_success_2[1],
         a2_attempts_2: defense_attempts_2[1],
         a2_rating_2: defense_speed_2[1],
@@ -951,6 +1062,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         b2_rating_2: defense_speed_2[3],
         b2_assist_2: defense_assist_2[3],
         b2_stuck_2: defense_stuck_2[3],
+        c1_success_2: defense_success_2[4],
+        c1_attempts_2: defense_attempts_2[4],
+        c1_rating_2: defense_speed_2[4],
+        c1_assist_2: defense_assist_2[4],
+        c1_stuck_2: defense_stuck_2[4],
         c2_success_2: defense_success_2[5],
         c2_attempts_2: defense_attempts_2[5],
         c2_rating_2: defense_speed_2[5],
@@ -985,12 +1101,16 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         auto_high_attempts_3: auto_high_attempts_3,
         auto_low_made_3: auto_low_made_3,
         auto_low_attempts_3: auto_low_attempts_3,
+        auto_a1_success_3: auto_defense_success_3[0],
+        auto_a1_attempts_3: auto_defense_attempts_3[0],
         auto_a2_success_3: auto_defense_success_3[1],
         auto_a2_attempts_3: auto_defense_attempts_3[1],
         auto_b1_success_3: auto_defense_success_3[2],
         auto_b1_attempts_3: auto_defense_attempts_3[2],
         auto_b2_success_3: auto_defense_success_3[3],
         auto_b2_attempts_3: auto_defense_attempts_3[3],
+        auto_c1_success_3: auto_defense_success_3[4],
+        auto_c1_attempts_3: auto_defense_attempts_3[4],
         auto_c2_success_3: auto_defense_success_3[5],
         auto_c2_attempts_3: auto_defense_attempts_3[5],
         auto_d1_success_3: auto_defense_success_3[6],
@@ -1009,6 +1129,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         floor_intakes_3: floor_intakes_3,
         deads_3: deads_3,
         fouls_3: fouls_3,
+        a1_success_3: defense_success_3[0],
+        a1_attempts_3: defense_attempts_3[0],
+        a1_rating_3: defense_speed_3[0],
+        a1_assist_3: defense_assist_3[0],
+        a1_stuck_3: defense_stuck_3[0],
         a2_success_3: defense_success_3[1],
         a2_attempts_3: defense_attempts_3[1],
         a2_rating_3: defense_speed_3[1],
@@ -1024,6 +1149,11 @@ rest_router.prototype.handleRoutes = function(router, connection) {
         b2_rating_3: defense_speed_3[3],
         b2_assist_3: defense_assist_3[3],
         b2_stuck_3: defense_stuck_3[3],
+        c1_success_3: defense_success_3[4],
+        c1_attempts_3: defense_attempts_3[4],
+        c1_rating_3: defense_speed_3[4],
+        c1_assist_3: defense_assist_3[4],
+        c1_stuck_3: defense_stuck_3[4],
         c2_success_3: defense_success_3[5],
         c2_attempts_3: defense_attempts_3[5],
         c2_rating_3: defense_speed_3[5],
@@ -1084,8 +1214,14 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     "total_challenge_attempts=(SELECT SUM(tele_challenge)+SUM(tele_challenge_failed) FROM matches WHERE team_number=" + team_number + "), " +
     "total_stucks=(SELECT SUM(a2_stuck)+SUM(b1_stuck)+SUM(b2_stuck)+SUM(c2_stuck)+SUM(d1_stuck)+SUM(d2_stuck)+SUM(lb_stuck) FROM matches WHERE team_number=" + team_number + "), " +
     "total_terrains=(SELECT SUM(b1_successful)+SUM(b2_successful)+SUM(d1_successful)+SUM(d2_successful) FROM matches WHERE team_number=" + team_number + "), " +
-    "total_defenses=(SELECT SUM(a2_successful)+SUM(b1_successful)+SUM(b2_successful)+SUM(c2_successful)+SUM(d1_successful)+SUM(d2_successful) FROM matches WHERE team_number=" + team_number + "), " +
-    "perc_a2_cross=(SELECT SUM(a2_successful)/SUM(a2_attempts) FROM matches WHERE team_number=" + team_number + "), " +
+    "total_defenses=(SELECT SUM(a1_successful)+SUM(a2_successful)+SUM(b1_successful)+SUM(b2_successful)+SUM(c1_successful)+SUM(c2_successful)+SUM(d1_successful)+SUM(d2_successful) FROM matches WHERE team_number=" + team_number + "), " +
+    "perc_a1_cross=(SELECT SUM(a1_successful)/SUM(a1_attempts) FROM matches WHERE team_number=" + team_number + "), " +
+    "tot_a1_successful=(SELECT SUM(a1_successful) FROM matches WHERE team_number=" + team_number + "), " +
+    "tot_a1_attempts=(SELECT SUM(a1_attempts) FROM matches WHERE team_number = " + team_number + "), " +
+    "tot_a1_stuck=(SELECT SUM(a1_stuck) FROM matches WHERE team_number=" + team_number + "), " +
+    "tot_a1_assisted=(SELECT SUM(a1_assists) FROM matches WHERE team_number=" + team_number + "), " +
+    "avg_a1_speed=(SELECT SUM(a1_total) FROM matches WHERE team_number=" + team_number + ")/(SELECT SUM(a1_successful) FROM matches WHERE team_number=" + team_number + "), " +
+    "perc_a2_cross=(SELECT SUM(a1_successful)/SUM(a1_attempts) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_a2_successful=(SELECT SUM(a2_successful) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_a2_attempts=(SELECT SUM(a2_attempts) FROM matches WHERE team_number = " + team_number + "), " +
     "tot_a2_stuck=(SELECT SUM(a2_stuck) FROM matches WHERE team_number=" + team_number + "), " +
@@ -1103,6 +1239,12 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     "tot_b2_stuck=(SELECT SUM(b2_stuck) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_b2_assisted=(SELECT SUM(b2_assists) FROM matches WHERE team_number=" + team_number + "), " +
     "avg_b2_speed=(SELECT SUM(b2_total) FROM matches WHERE team_number=" + team_number + ")/(SELECT SUM(b2_successful) FROM matches WHERE team_number=" + team_number + "), " +
+    "perc_c1_cross=(SELECT SUM(c1_successful)/SUM(c1_attempts) FROM matches WHERE team_number=" + team_number + "), " +
+    "tot_c1_successful=(SELECT SUM(c1_successful) FROM matches WHERE team_number=" + team_number + "), " +
+    "tot_c1_attempts=(SELECT SUM(c1_attempts) FROM matches WHERE team_number = " + team_number + "), " +
+    "tot_c1_stuck=(SELECT SUM(c1_stuck) FROM matches WHERE team_number=" + team_number + "), " +
+    "tot_c1_assisted=(SELECT SUM(c1_assists) FROM matches WHERE team_number=" + team_number + "), " +
+    "avg_c1_speed=(SELECT SUM(c1_total) FROM matches WHERE team_number=" + team_number + ")/(SELECT SUM(c1_successful) FROM matches WHERE team_number=" + team_number + "), " +
     "perc_c2_cross=(SELECT SUM(c2_successful)/SUM(c2_attempts) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_c2_successful=(SELECT SUM(c2_successful) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_c2_attempts=(SELECT SUM(c2_attempts) FROM matches WHERE team_number = " + team_number + "), " +
@@ -1127,6 +1269,9 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     "tot_lb_stuck=(SELECT SUM(lb_stuck) FROM matches WHERE team_number=" + team_number + "), " +
     "tot_lb_assisted=(SELECT SUM(lb_assists) FROM matches WHERE team_number=" + team_number + "), " +
     "avg_lb_speed=(SELECT SUM(lb_total) FROM matches WHERE team_number=" + team_number + ")/(SELECT SUM(lb_successful) FROM matches WHERE team_number=" + team_number + "), " +
+    "auton_a1=(SELECT COUNT(*) FROM matches WHERE team_number=" + team_number + " AND auton_defense_crossed='PC' AND auton_defense_total<>0), " +
+    "auton_a1_attempts=((SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='PC' AND auton_defense_total<>0)+(SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='CF' AND auton_defense_total=0)), " +
+    "auton_a1_perc=100*(auton_a1/auton_a1_attempts), " +
     "auton_a2=(SELECT COUNT(*) FROM matches WHERE team_number=" + team_number + " AND auton_defense_crossed='CF' AND auton_defense_total<>0), " +
     "auton_a2_attempts=((SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='CF' AND auton_defense_total<>0)+(SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='CF' AND auton_defense_total=0)), " +
     "auton_a2_perc=100*(auton_a2/auton_a2_attempts), " +
@@ -1136,6 +1281,9 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     "auton_b2=(SELECT COUNT(*) FROM matches WHERE team_number=" + team_number + " AND auton_defense_crossed='RP' AND auton_defense_total<>0), " +
     "auton_b2_attempts=((SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='RP' AND auton_defense_total<>0)+(SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='RP' AND auton_defense_total=0)), " +
     "auton_b2_perc=100*(auton_b2/auton_b2_attempts), " +
+    "auton_c1=(SELECT COUNT(*) FROM matches WHERE team_number=" + team_number + " AND auton_defense_crossed='DB' AND auton_defense_total<>0), " +
+    "auton_c1_attempts=((SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='DB' AND auton_defense_total<>0)+(SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='SP' AND auton_defense_total=0)), " +
+    "auton_c1_perc=100*(auton_c1/auton_c1_attempts), " +
     "auton_c2=(SELECT COUNT(*) FROM matches WHERE team_number=" + team_number + " AND auton_defense_crossed='SP' AND auton_defense_total<>0), " +
     "auton_c2_attempts=((SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='SP' AND auton_defense_total<>0)+(SELECT COUNT(*) FROM matches WHERE team_number = " + team_number + " AND auton_defense_crossed='SP' AND auton_defense_total=0)), " +
     "auton_c2_perc=100*(auton_c2/auton_c2_attempts), " +

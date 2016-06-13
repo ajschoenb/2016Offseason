@@ -1,5 +1,5 @@
-const electron = require("electron").app;
-const {BrowserWindow} = require("electron");
+// const electron = require("electron").app;
+// const {BrowserWindow} = require("electron");
 var mysql = require("mysql");
 var rest = require("./rest.js");
 var express = require("express");
@@ -10,7 +10,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
-let win;
+// let win;
 
 function REST() {
   var self;
@@ -59,12 +59,12 @@ REST.prototype.stop = function(err) {
 };
 
 new REST;
-
-// Actually start the window
-electron.on("ready", function() {
-  win = new BrowserWindow({
-    icon: __dirname + "/118.png"
-  });
-  win.maximize();
-  win.loadURL("http://localhost:8080"); // Load homepage
-});
+//
+// // Actually start the window
+// electron.on("ready", function() {
+//   win = new BrowserWindow({
+//     icon: __dirname + "/118.png"
+//   });
+//   win.maximize();
+//   win.loadURL("http://localhost:8080"); // Load homepage
+// });
