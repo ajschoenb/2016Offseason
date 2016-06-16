@@ -260,6 +260,7 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       });
   });
   router.get("/team/:team_number", function(req, res) {
+    updateTeams(req.params.team_number);
     var team_number = req.params.team_number;
     var team_name = "";
     var num_matches = 0;
@@ -291,7 +292,6 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     var avg_bully_rating = 0;
     var fouls = 0;
     var deads = 0;
-    var outlier_str = "";
     var team_sql = "SELECT * FROM teams WHERE team_number=" + team_number;
     connection.query(team_sql, function(err, rows, fields) {
       team_name = rows[0].team_name;
