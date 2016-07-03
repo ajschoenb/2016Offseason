@@ -13,19 +13,13 @@
     <div class="row">
       <div class="col-lg-6">
         <h2>
-          <%= team_number %> - <%= team_name %>
-          <br />
-          <div class="btn-group" role="group" aria-label="...">
-            <a href="/team/<%= previous_team %>" type="button" class="btn btn-default">Previous</a>
-            <a href="/team/<%= next_team %>" type="button" class="btn btn-default">Next</a>
-            <a href="/matches/<%= team_number %>" type="button" class="btn btn-default">View Matches</a>
-          </div>
+          <%= team_number %> - <%= team_name %>, Match #<%= match_number %>
         </h2>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-5">
-        <h3 style="margin-top:0;">Avg. Score: <%= avg_auto_score %> / <%= avg_contrib_score %></h3>
+        <h3 style="margin-top:0;">Contributed Score: <%= avg_auto_score %> / <%= avg_contrib_score %></h3>
         <h3><u>Autonomous Data</u></h3>
         <table class="table">
           <tr>
@@ -159,54 +153,6 @@
             <td style="text-align:right; padding-right:50px;"><h4 style="margin-top:0;">Challenge: <%= challenge_success %> / <%= challenge_attempts %></h4></td>
           </tr>
         </table>
-      </div>
-      <div class="col-lg-6 col-lg-offset-1 col-md-6 col-md-offset-1 col-sm-offset-0 col-xs-offset-0 col-sm-12 col-xs-12" style="font-size: 10px;">
-        <h4>Contributed Score Trend</h4>
-        <canvas id="trend_line"></canvas>
-
-        <h4>High Goal Trend</h4>
-        <canvas id="high_trend_line"></canvas>
-
-        <script type="text/javascript">
-            var data = {
-                labels: [<%= trend_labels %> 'Next'],
-                datasets: [
-                    {
-                        label: "Contrib Score",
-                        fillColor: "rgba(151,187,205,0.2)",
-                        strokeColor: "rgba(151,187,205,1)",
-                        pointColor: "rgba(151,187,205,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(151,187,205,1)",
-                        data: [<%= trend_data %>]
-                    }
-                ]
-            };
-
-            var high_data = {
-                labels: [<%= trend_labels %> 'Next'],
-                datasets: [
-                {
-                    label: "High Goal",
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(151,187,205,1)",
-                    data: [<%= high_goal_trend %>]
-                }
-                ]
-            };
-            window.onload = function()
-            {
-                var ctx = document.getElementById("trend_line").getContext("2d");
-                var ctx1 = document.getElementById("high_trend_line").getContext("2d");
-                var myLineChart = new Chart(ctx).Line(data,  {responsive: true, scaleOverride: true, scaleSteps:10, scaleStepWidth:10, scaleStartValue:0});
-                var myLineChart1 = new Chart(ctx1).Line(high_data,  {responsive: true, scaleOverride: true, scaleSteps:10, scaleStepWidth:1, scaleStartValue:0});
-            }
-        </script>
       </div>
     </div>
   </main>

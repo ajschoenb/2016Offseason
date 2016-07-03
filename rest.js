@@ -524,6 +524,734 @@ rest_router.prototype.handleRoutes = function(router, connection) {
     });
   });
 
+  router.get("/matches/:team_number", function(req, res) {
+    var team_number = req.params.team_number;
+    var team_name = "";
+    var matches = [];
+    var auto_score = [];
+    var contrib_score = [];
+    var floor_intakes = [];
+    var high_made = [];
+    var high_attempts = [];
+    var low_made = [];
+    var low_attempts = [];
+    var auto_high_made = [];
+    var auto_high_attempts = [];
+    var auto_low_made = [];
+    var auto_low_attempts = [];
+    var auto_reaches = [];
+    var hang = [];
+    var hang_attempts = [];
+    var challenge = [];
+    var challenge_attempts = [];
+    var defense_success = [];
+    var defense_attempts = [];
+    var defense_stuck = [];
+    var defense_assist = [];
+    var defense_speed = [];
+    var auto_defense_success = [];
+    var auto_defense_attempts = [];
+    var knockouts = [];
+    var driver_rating = [];
+    var bully_rating = [];
+    var fouls = [];
+    var deads = [];
+    var no_autos = [];
+    var matches_data = "";
+
+    var team_name_sql = "SELECT * FROM teams WHERE team_number=" + team_number;
+    connection.query(team_name_sql, function(err, rows, fields) {
+      team_name = rows[0].team_name;
+    });
+
+    var matches_sql = "SELECT * FROM matches WHERE team_number=" + team_number;
+    connection.query(matches_sql, function(err, rows, fields) {
+      for(var x in rows) {
+        matches[x] = rows[x].match_number;
+        auto_score[x] = rows[x].auton_score;
+        contrib_score[x] = rows[x].contributed_score;
+        floor_intakes[x] = rows[x].tele_floor_intake;
+        high_made[x] = rows[x].tele_high_made;
+        high_attempts[x] = rows[x].tele_high_made + rows[x].tele_high_missed;
+        low_made[x] = rows[x].tele_low_made;
+        low_attempts[x] = rows[x].tele_low_made + rows[x].tele_low_missed;
+        auto_high_made[x] = rows[x].auton_high;
+        auto_high_attempts[x] = rows[x].auton_high + rows[x].auton_high_missed;
+        auto_low_made[x] = rows[x].auton_low;
+        auto_low_attempts[x] = rows[x].auton_low + rows[x].auton_low_missed;
+        auto_reaches[x] = rows[x].auton_reach;
+        hang[x] = rows[x].tele_hang;
+        hang_attempts[x] = rows[x].tele_hang + rows[x].tele_hang_failed;
+        challenge[x] = rows[x].tele_challenge;
+        challenge_attempts[x] = rows[x].tele_challenge + rows[x].tele_challenge_failed;
+        defense_success[x] = [];
+        defense_attempts[x] = [];
+        defense_stuck[x] = [];
+        defense_assist[x] = [];
+        defense_speed[x] = [];
+        auto_defense_success[x] = [];
+        auto_defense_attempts[x] = [];
+        defense_success[x][0] = rows[x].a1_successful;
+        defense_attempts[x][0] = rows[x].a1_attempts;
+        defense_stuck[x][0] = rows[x].a1_stuck;
+        defense_assist[x][0] = rows[x].a1_assists;
+        defense_speed[x][0] = rows[x].a1_total;
+        defense_success[x][1] = rows[x].a2_successful;
+        defense_attempts[x][1] = rows[x].a2_attempts;
+        defense_stuck[x][1] = rows[x].a2_stuck;
+        defense_assist[x][1] = rows[x].a2_assists;
+        defense_speed[x][1] = rows[x].a2_total;
+        defense_success[x][2] = rows[x].b1_successful;
+        defense_attempts[x][2] = rows[x].b1_attempts;
+        defense_stuck[x][2] = rows[x].b1_stuck;
+        defense_assist[x][2] = rows[x].b1_assists;
+        defense_speed[x][2] = rows[x].b1_total;
+        defense_success[x][3] = rows[x].b2_successful;
+        defense_attempts[x][3] = rows[x].b2_attempts;
+        defense_stuck[x][3] = rows[x].b2_stuck;
+        defense_assist[x][3] = rows[x].b2_assists;
+        defense_speed[x][3] = rows[x].b2_total;
+        defense_success[x][4] = rows[x].c1_successful;
+        defense_attempts[x][4] = rows[x].c1_attempts;
+        defense_stuck[x][4] = rows[x].c1_stuck;
+        defense_assist[x][4] = rows[x].c1_assists;
+        defense_speed[x][4] = rows[x].c1_total;
+        defense_success[x][5] = rows[x].c2_successful;
+        defense_attempts[x][5] = rows[x].c2_attempts;
+        defense_stuck[x][5] = rows[x].c2_stuck;
+        defense_assist[x][5] = rows[x].c2_assists;
+        defense_speed[x][5] = rows[x].c2_total;
+        defense_success[x][6] = rows[x].d1_successful;
+        defense_attempts[x][6] = rows[x].d1_attempts;
+        defense_stuck[x][6] = rows[x].d1_stuck;
+        defense_assist[x][6] = rows[x].d1_assists;
+        defense_speed[x][6] = rows[x].d1_total;
+        defense_success[x][7] = rows[x].d2_successful;
+        defense_attempts[x][7] = rows[x].d2_attempts;
+        defense_stuck[x][7] = rows[x].d2_stuck;
+        defense_assist[x][7] = rows[x].d2_assists;
+        defense_speed[x][7] = rows[x].d2_total;
+        defense_success[x][8] = rows[x].lb_successful;
+        defense_attempts[x][8] = rows[x].lb_attempts;
+        defense_stuck[x][8] = rows[x].lb_stuck;
+        defense_assist[x][8] = rows[x].lb_assists;
+        defense_speed[x][8] = rows[x].lb_total;
+        if(rows[0].auton_defense_crossed === "PC") {
+          auto_defense_success[x][0] = 1;
+          auto_defense_attempts[x][0] = 1;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "CF") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 1;
+          auto_defense_attempts[x][1] = 1;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "M") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 1;
+          auto_defense_attempts[x][2] = 1;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "RP") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 1;
+          auto_defense_attempts[x][3] = 1;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "DB") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 1;
+          auto_defense_attempts[x][4] = 1;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "SP") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 1;
+          auto_defense_attempts[x][5] = 1;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "RW") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 1;
+          auto_defense_attempts[x][6] = 1;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "RT") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 1;
+          auto_defense_attempts[x][7] = 1;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        else if(rows[x].auton_defense_crossed === "LB") {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 1;
+          auto_defense_attempts[x][8] = 1;
+        }
+        else {
+          auto_defense_success[x][0] = 0;
+          auto_defense_attempts[x][0] = 0;
+          auto_defense_success[x][1] = 0;
+          auto_defense_attempts[x][1] = 0;
+          auto_defense_success[x][2] = 0;
+          auto_defense_attempts[x][2] = 0;
+          auto_defense_success[x][3] = 0;
+          auto_defense_attempts[x][3] = 0;
+          auto_defense_success[x][4] = 0;
+          auto_defense_attempts[x][4] = 0;
+          auto_defense_success[x][5] = 0;
+          auto_defense_attempts[x][5] = 0;
+          auto_defense_success[x][6] = 0;
+          auto_defense_attempts[x][6] = 0;
+          auto_defense_success[x][7] = 0;
+          auto_defense_attempts[x][7] = 0;
+          auto_defense_success[x][8] = 0;
+          auto_defense_attempts[x][8] = 0;
+        }
+        knockouts[x] = rows[x].tele_knock_out;
+        driver_rating[x] = rows[x].driver_rating;
+        bully_rating[x] = rows[x].bully_rating;
+        fouls[x] = rows[x].fouls_noticed;
+        deads[x] = rows[x].dead;
+        if(rows[x].auton_score === 0)
+          no_autos[x] = 1;
+        else
+          no_autos[x] = 0;
+
+        if(matches.length % 2 === 1) {
+          matches_data += "<tr>";
+        }
+        matches_data += "<td style=\"padding-left:30px;\">" +
+        "<div class=\"row\">" +
+          "<div class=\"col-lg-12\">" +
+            "<h2>" +
+              "<a style=\"color: black;\" href=\"/match/" + team_number + "," + matches[x] + "\">Match #" + matches[x] + "</a>" +
+            "</h2>" +
+          "</div>" +
+        "</div>" +
+        "<div class=\"row\">" +
+          "<div class=\"col-lg-10\">" +
+            "<h3 style=\"margin-top:0;\">Contributed Score: " + auto_score[x] + " / " + contrib_score[x] + "</h3>" +
+            "<h3><u>Autonomous Data</u></h3>" +
+            "<table class=\"table\">" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">No Auto: " + no_autos[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Reaches: " + auto_reaches[x] + "</h4></td>" +
+              "</tr>" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">High Goals: " + auto_high_made[x] + " / " + auto_high_attempts[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Low Goals: " + auto_low_made[x] + " / " + auto_low_attempts[x] + "</h4></td>" +
+              "</tr>" +
+            "</table>" +
+            "<table class=\"table\">" +
+              "<tr>" +
+                "<th>PC</th>" +
+                "<th>CF</th>" +
+                "<th>M</th>" +
+                "<th>RP</th>" +
+                "<th>DB</th>" +
+                "<th>SP</th>" +
+                "<th>RW</th>" +
+                "<th>LB</th>" +
+                "<th>RT</th>" +
+              "</tr>" +
+              "<tr>" +
+                "<td>" + auto_defense_success[x][0] + " / " + auto_defense_attempts[x][0] + "</td>" +
+                "<td>" + auto_defense_success[x][1] + " / " + auto_defense_attempts[x][1] + "</td>" +
+                "<td>" + auto_defense_success[x][2] + " / " + auto_defense_attempts[x][2] + "</td>" +
+                "<td>" + auto_defense_success[x][3] + " / " + auto_defense_attempts[x][3] + "</td>" +
+                "<td>" + auto_defense_success[x][4] + " / " + auto_defense_attempts[x][4] + "</td>" +
+                "<td>" + auto_defense_success[x][5] + " / " + auto_defense_attempts[x][5] + "</td>" +
+                "<td>" + auto_defense_success[x][6] + " / " + auto_defense_attempts[x][6] + "</td>" +
+                "<td>" + auto_defense_success[x][7] + " / " + auto_defense_attempts[x][7] + "</td>" +
+                "<td>" + auto_defense_success[x][8] + " / " + auto_defense_attempts[x][8] + "</td>" +
+              "</tr>" +
+            "</table>" +
+            "<h3><u>Teleop Data</u></h3>" +
+            "<table class=\"table\">" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">High Goals: " + high_made[x] + " / " + high_attempts[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Low Goals: " + low_made[x] + " / " + low_attempts[x] + "</h4></td>" +
+              "</tr>" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">Driver Rating: " + driver_rating[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Bully Rating: " + bully_rating[x] + "</h4></td>" +
+              "</tr>" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">Knockouts: " + knockouts[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Floor Intakes: " + floor_intakes[x] + "</h4></td>" +
+              "</tr>" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">Deads: " + deads[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Fouls: " + fouls[x] + "</h4></td>" +
+              "</tr>" +
+            "</table>" +
+            "<table class=\"table\">" +
+              "<tr>" +
+                "<th />" +
+                "<th>Results</th>" +
+                "<th>Rating</th>" +
+                "<th>Assist</th>" +
+                "<th>Stuck</th>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>PC</th>" +
+                "<td>" + defense_success[x][0] + " / " + defense_attempts[x][0] + "</td>" +
+                "<td>" + defense_speed[x][0] + "</td>" +
+                "<td>" + defense_assist[x][0] + "</td>" +
+                "<td>" + defense_stuck[x][0] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>CF</th>" +
+                "<td>" + defense_success[x][1] + " / " + defense_attempts[x][1] + "</td>" +
+                "<td>" + defense_speed[x][1] + "</td>" +
+                "<td>" + defense_assist[x][1] + "</td>" +
+                "<td>" + defense_stuck[x][1] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>M</th>" +
+                "<td>" + defense_success[x][2] + " / " + defense_attempts[x][2] + "</td>" +
+                "<td>" + defense_speed[x][2] + "</td>" +
+                "<td>" + defense_assist[x][2] + "</td>" +
+                "<td>" + defense_stuck[x][2] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>RP</th>" +
+                "<td>" + defense_success[x][3] + " / " + defense_attempts[x][3] + "</td>" +
+                "<td>" + defense_speed[x][3] + "</td>" +
+                "<td>" + defense_assist[x][3] + "</td>" +
+                "<td>" + defense_stuck[x][3] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>DB</th>" +
+                "<td>" + defense_success[x][4] + " / " + defense_attempts[x][4] + "</td>" +
+                "<td>" + defense_speed[x][4] + "</td>" +
+                "<td>" + defense_assist[x][4] + "</td>" +
+                "<td>" + defense_stuck[x][4] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>SP</th>" +
+                "<td>" + defense_success[x][5] + " / " + defense_attempts[x][5] + "</td>" +
+                "<td>" + defense_speed[x][5] + "</td>" +
+                "<td>" + defense_assist[x][5] + "</td>" +
+                "<td>" + defense_stuck[x][5] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>RW</th>" +
+                "<td>" + defense_success[x][6] + " / " + defense_attempts[x][6] + "</td>" +
+                "<td>" + defense_speed[x][6] + "</td>" +
+                "<td>" + defense_assist[x][6] + "</td>" +
+                "<td>" + defense_stuck[x][6] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>RT</th>" +
+                "<td>" + defense_success[x][7] + " / " + defense_attempts[x][7] + "</td>" +
+                "<td>" + defense_speed[x][7] + "</td>" +
+                "<td>" + defense_assist[x][7] + "</td>" +
+                "<td>" + defense_stuck[x][7] + "</td>" +
+              "</tr>" +
+              "<tr>" +
+                "<th>LB</th>" +
+                "<td>" + defense_success[x][8] + " / " + defense_attempts[x][8] + "</td>" +
+                "<td>" + defense_speed[x][8] + "</td>" +
+                "<td>" + defense_assist[x][8] + "</td>" +
+                "<td>" + defense_stuck[x][8] + "</td>" +
+              "</tr>" +
+            "</table>" +
+            "<h3><u>End Game</u></h3>" +
+            "<table class=\"table\">" +
+              "<tr>" +
+                "<td><h4 style=\"margin-top:0;\">Hang: " + hang[x] + " / " + hang_attempts[x] + "</h4></td>" +
+                "<td style=\"text-align:right; padding-right:50px;\"><h4 style=\"margin-top:0;\">Challenge: " + challenge[x] + " / " + challenge_attempts[x] + "</h4></td>" +
+              "</tr>" +
+            "</table>" +
+          "</div>" +
+        "</div>" +
+        "</td>";
+        if(matches.length % 2 === 0) {
+          matches_data += "</tr>";
+        }
+      }
+
+      res.render("pages/team_match", {
+        team_number: team_number,
+        team_name: team_name,
+        matches: matches_data
+      });
+    });
+  });
+
+  router.get("/match/:team_number,:match_number", function(req, res) {
+    var team_number = req.params.team_number;
+    var match_number = req.params.match_number;
+    var team_name = "";
+    var num_matches = 0;
+    var auto_score = 0;
+    var contrib_score = 0;
+    var floor_intakes = 0;
+    var high_made = 0;
+    var high_attempts = 0;
+    var low_made = 0;
+    var low_attempts = 0;
+    var auto_high_made = 0;
+    var auto_high_attempts = 0;
+    var auto_low_made = 0;
+    var auto_low_attempts = 0;
+    var auto_reaches = 0;
+    var hang = 0;
+    var hang_attempts = 0;
+    var challenge = 0;
+    var challenge_attempts = 0;
+    var defense_success = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var defense_attempts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var defense_stuck = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var defense_assist = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var defense_speed = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var auto_defense_success = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var auto_defense_attempts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var knockouts = 0;
+    var driver_rating = 0;
+    var bully_rating = 0;
+    var fouls = 0;
+    var deads = 0;
+    var team_sql = "SELECT * FROM matches WHERE team_number=" + team_number + " AND match_number=" + match_number;
+    connection.query(team_sql, function(err, rows, fields) {
+      auto_score = rows[0].auton_score;
+      contrib_score = rows[0].contributed_score;
+      floor_intakes = rows[0].tele_floor_intake;
+      high_made = rows[0].tele_high_made;
+      high_attempts = rows[0].tele_high_made + rows[0].tele_high_missed;
+      low_made = rows[0].tele_low_made;
+      low_attempts = rows[0].tele_low_made + rows[0].tele_low_missed;
+      auto_high_made = rows[0].auton_high;
+      auto_high_attempts = rows[0].auton_high + rows[0].auton_high_missed;
+      auto_low_made = rows[0].auton_low;
+      auto_low_attempts = rows[0].auton_low + rows[0].auton_low_missed;
+      auto_reaches = rows[0].auton_reach;
+      hang = rows[0].tele_hang;
+      hang_attempts = rows[0].tele_hang + rows[0].tele_hang_failed;
+      challenge = rows[0].tele_challenge;
+      challenge_attempts = rows[0].tele_challenge + rows[0].tele_challenge_failed;
+      defense_success[0] = rows[0].a1_successful;
+      defense_attempts[0] = rows[0].a1_attempts;
+      defense_stuck[0] = rows[0].a1_stuck;
+      defense_assist[0] = rows[0].a1_assisted;
+      defense_speed[0] = rows[0].a1_total;
+      defense_success[1] = rows[0].a2_successful;
+      defense_attempts[1] = rows[0].a2_attempts;
+      defense_stuck[1] = rows[0].a2_stuck;
+      defense_assist[1] = rows[0].a2_assisted;
+      defense_speed[1] = rows[0].a2_total;
+      defense_success[2] = rows[0].b1_successful;
+      defense_attempts[2] = rows[0].b1_attempts;
+      defense_stuck[2] = rows[0].b1_stuck;
+      defense_assist[2] = rows[0].b1_assisted;
+      defense_speed[2] = rows[0].b1_total;
+      defense_success[3] = rows[0].b2_successful;
+      defense_attempts[3] = rows[0].b2_attempts;
+      defense_stuck[3] = rows[0].b2_stuck;
+      defense_assist[3] = rows[0].b2_assisted;
+      defense_speed[3] = rows[0].b2_total;
+      defense_success[4] = rows[0].c1_successful;
+      defense_attempts[4] = rows[0].c1_attempts;
+      defense_stuck[4] = rows[0].c1_stuck;
+      defense_assist[4] = rows[0].c1_assisted;
+      defense_speed[4] = rows[0].c1_total;
+      defense_success[5] = rows[0].c2_successful;
+      defense_attempts[5] = rows[0].c2_attempts;
+      defense_stuck[5] = rows[0].c2_stuck;
+      defense_assist[5] = rows[0].c2_assisted;
+      defense_speed[5] = rows[0].c2_total;
+      defense_success[6] = rows[0].d1_successful;
+      defense_attempts[6] = rows[0].d1_attempts;
+      defense_stuck[6] = rows[0].d1_stuck;
+      defense_assist[6] = rows[0].d1_assisted;
+      defense_speed[6] = rows[0].d1_total;
+      defense_success[7] = rows[0].d2_successful;
+      defense_attempts[7] = rows[0].d2_attempts;
+      defense_stuck[7] = rows[0].d2_stuck;
+      defense_assist[7] = rows[0].d2_assisted;
+      defense_speed[7] = rows[0].d2_total;
+      defense_success[8] = rows[0].lb_successful;
+      defense_attempts[8] = rows[0].lb_attempts;
+      defense_stuck[8] = rows[0].lb_stuck;
+      defense_assist[8] = rows[0].lb_assisted;
+      defense_speed[8] = rows[0].lb_total;
+      if(rows[0].auton_defense_crossed === "PC") {
+        auto_defense_success[0] = 1;
+        auto_defense_attempts[0] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "CF") {
+        auto_defense_success[1] = 1;
+        auto_defense_attempts[1] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "M") {
+        auto_defense_success[2] = 1;
+        auto_defense_attempts[2] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "RP") {
+        auto_defense_success[3] = 1;
+        auto_defense_attempts[3] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "DB") {
+        auto_defense_success[4] = 1;
+        auto_defense_attempts[4] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "SP") {
+        auto_defense_success[5] = 1;
+        auto_defense_attempts[5] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "RW") {
+        auto_defense_success[6] = 1;
+        auto_defense_attempts[6] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "RT") {
+        auto_defense_success[7] = 1;
+        auto_defense_attempts[7] = 1;
+      }
+      else if(rows[0].auton_defense_crossed === "LB") {
+        auto_defense_success[8] = 1;
+        auto_defense_attempts[8] = 1;
+      }
+      knockouts = rows[0].tele_knock_out;
+      driver_rating = rows[0].driver_rating;
+      bully_rating = rows[0].bully_rating;
+      fouls = rows[0].fouls_noticed;
+      deads = rows[0].dead;
+    });
+    var team_name_sql = "SELECT * FROM teams WHERE team_number=" + team_number;
+    connection.query(team_name_sql, function(err, rows, fields) {
+      team_name = rows[0].team_name;
+    });
+
+    var no_auto_sql = "SELECT * FROM matches WHERE team_number = " + team_number + " AND match_number=" + match_number + " AND auton_score = 0";
+    var no_autos = 0;
+    connection.query(no_auto_sql, function(err, rows, fields) {
+      for(var x in rows) {
+        no_autos++;
+      }
+
+      res.render("pages/match", {
+        team_number: team_number,
+        team_name: team_name,
+        match_number: match_number,
+        avg_auto_score: auto_score,
+        avg_contrib_score: contrib_score,
+        no_autos: no_autos,
+        auto_reaches: auto_reaches,
+        auto_high_made: auto_high_made,
+        auto_high_attempts: auto_high_attempts,
+        auto_low_made: auto_low_made,
+        auto_low_attempts: auto_low_attempts,
+        auto_a1_success: auto_defense_success[0],
+        auto_a1_attempts: auto_defense_attempts[0],
+        auto_a2_success: auto_defense_success[1],
+        auto_a2_attempts: auto_defense_attempts[1],
+        auto_b1_success: auto_defense_success[2],
+        auto_b1_attempts: auto_defense_attempts[2],
+        auto_b2_success: auto_defense_success[3],
+        auto_b2_attempts: auto_defense_attempts[3],
+        auto_c1_success: auto_defense_success[4],
+        auto_c1_attempts: auto_defense_attempts[4],
+        auto_c2_success: auto_defense_success[5],
+        auto_c2_attempts: auto_defense_attempts[5],
+        auto_d1_success: auto_defense_success[6],
+        auto_d1_attempts: auto_defense_attempts[6],
+        auto_d2_success: auto_defense_success[7],
+        auto_d2_attempts: auto_defense_attempts[7],
+        auto_lb_success: auto_defense_success[8],
+        auto_lb_attempts: auto_defense_attempts[8],
+        tele_high_made: high_made,
+        tele_high_attempts: high_attempts,
+        tele_low_made: low_made,
+        tele_low_attempts: low_attempts,
+        avg_driver_rating: driver_rating,
+        avg_bully_rating: bully_rating,
+        knockouts: knockouts,
+        floor_intakes: floor_intakes,
+        deads: deads,
+        fouls: fouls,
+        a1_success: defense_success[0],
+        a1_attempts: defense_attempts[0],
+        a1_rating: defense_speed[0],
+        a1_assist: defense_assist[0],
+        a1_stuck: defense_stuck[0],
+        a2_success: defense_success[1],
+        a2_attempts: defense_attempts[1],
+        a2_rating: defense_speed[1],
+        a2_assist: defense_assist[1],
+        a2_stuck: defense_stuck[1],
+        b1_success: defense_success[2],
+        b1_attempts: defense_attempts[2],
+        b1_rating: defense_speed[2],
+        b1_assist: defense_assist[2],
+        b1_stuck: defense_stuck[2],
+        b2_success: defense_success[3],
+        b2_attempts: defense_attempts[3],
+        b2_rating: defense_speed[3],
+        b2_assist: defense_assist[3],
+        b2_stuck: defense_stuck[3],
+        c1_success: defense_success[4],
+        c1_attempts: defense_attempts[4],
+        c1_rating: defense_speed[4],
+        c1_assist: defense_assist[4],
+        c1_stuck: defense_stuck[4],
+        c2_success: defense_success[5],
+        c2_attempts: defense_attempts[5],
+        c2_rating: defense_speed[5],
+        c2_assist: defense_assist[5],
+        c2_stuck: defense_stuck[5],
+        d1_success: defense_success[6],
+        d1_attempts: defense_attempts[6],
+        d1_rating: defense_speed[6],
+        d1_assist: defense_assist[6],
+        d1_stuck: defense_stuck[6],
+        d2_success: defense_success[7],
+        d2_attempts: defense_attempts[7],
+        d2_rating: defense_speed[7],
+        d2_assist: defense_assist[7],
+        d2_stuck: defense_stuck[7],
+        lb_success: defense_success[8],
+        lb_attempts: defense_attempts[8],
+        lb_rating: defense_speed[8],
+        lb_assist: defense_assist[8],
+        lb_stuck: defense_stuck[8],
+        hang_success: hang,
+        hang_attempts: hang_attempts,
+        challenge_success: challenge,
+        challenge_attempts: challenge_attempts
+      });
+    });
+  });
+
   router.get("/alliance", function(req, res) {
     res.render("pages/alliance_gen");
   });

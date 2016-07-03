@@ -4,6 +4,7 @@ var mysql = require("mysql");
 var rest = require("./rest.js");
 var express = require("express");
 var bodyParser = require("body-parser");
+var morgan = require("morgan");
 app = express();
 
 app.set("views", __dirname + "/views");
@@ -40,6 +41,7 @@ REST.prototype.configureExpress = function(connection) {
   var self = this;
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(morgan("dev"));
   router = express.Router();
   app.use("/", router);
   var rest_router = new rest(router, connection);
