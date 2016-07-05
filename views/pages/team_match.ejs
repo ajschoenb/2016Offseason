@@ -7,20 +7,24 @@
 <body class="container">
   <header>
     <% include ../partials/header.ejs %>
-    <div class="row" style="padding-top:60px;">
+  </header>
+
+  <main style="padding-top:60px;">
+    <div class="row">
       <div class="col-lg-12" align="center">
         <h2>
           <a href="/team/<%= team_number %>" style="color: black;"><%= team_number %> - <%= team_name %></a>
         </h2>
       </div>
     </div>
-  </header>
-
-  <!-- <main style="padding-top:10px; -webkit-column-count:2; -webkit-column-rule:solid; -moz-column-count:2; -moz-column-rule:solid;"> -->
-  <main style="padding-top:10px;">
     <table class="table table-bordered">
       <%- matches %>
     </table>
+    <% if(!matches) { %>
+      <div class="row" align="center">
+        <h3>No matches available for team <%= team_number %>.</h3>
+      </div>
+    <% } %>
   </main>
 
   <footer>

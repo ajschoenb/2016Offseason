@@ -55,7 +55,7 @@ rest_router.prototype.handleRoutes = function(router, connection) {
       fs.writeFile(filename, data, function(err) {
         console.log(err ? err : "File saved to " + __dirname);
       });
-      res.redirect("/sql");
+      res.download(__dirname + "/teams.csv");
     });
   });
   router.get("/data-entry", function(req, res) {
